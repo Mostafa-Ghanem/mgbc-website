@@ -1,0 +1,610 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>MG Business Consultancy | استشارات مالية وضريبية – السوق السعودي</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@300;400;500;600;700&family=Playfair+Display:wght@700;900&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --ink:     #0D1117;
+    --paper:   #F8F5EE;
+    --gold:    #B8933A;
+    --gold-lt: #D4AA55;
+    --stone:   #E8E2D8;
+    --muted:   #6B6256;
+    --white:   #FFFFFF;
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    font-family: 'IBM Plex Sans Arabic', sans-serif;
+    background: var(--paper);
+    color: var(--ink);
+    line-height: 1.75;
+    direction: rtl;
+  }
+
+  /* ── TOP BAR ── */
+  .topbar {
+    background: var(--ink);
+    color: var(--stone);
+    font-size: 0.78rem;
+    letter-spacing: 0.04em;
+    text-align: center;
+    padding: 9px 1rem;
+  }
+  .topbar span { color: var(--gold-lt); font-weight: 600; }
+
+  /* ── NAV ── */
+  nav {
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    background: rgba(248,245,238,0.95);
+    backdrop-filter: blur(10px);
+    border-bottom: 1px solid var(--stone);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1rem 6vw;
+  }
+  .nav-logo {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.15rem;
+    font-weight: 700;
+    color: var(--ink);
+    letter-spacing: 0.02em;
+    line-height: 1.2;
+  }
+  .nav-logo small {
+    display: block;
+    font-family: 'IBM Plex Sans Arabic', sans-serif;
+    font-size: 0.68rem;
+    font-weight: 400;
+    color: var(--muted);
+    letter-spacing: 0.06em;
+  }
+  .nav-cta {
+    background: var(--gold);
+    color: var(--white);
+    padding: 0.55rem 1.4rem;
+    border-radius: 3px;
+    font-size: 0.85rem;
+    font-weight: 600;
+    text-decoration: none;
+    transition: background 0.2s;
+    white-space: nowrap;
+  }
+  .nav-cta:hover { background: var(--gold-lt); }
+
+  /* ── HERO ── */
+  .hero {
+    position: relative;
+    background: var(--ink);
+    color: var(--white);
+    padding: 7rem 6vw 6rem;
+    overflow: hidden;
+  }
+  .hero::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background:
+      radial-gradient(ellipse 60% 70% at 80% 50%, rgba(184,147,58,0.12) 0%, transparent 65%),
+      repeating-linear-gradient(
+        90deg,
+        transparent,
+        transparent 59px,
+        rgba(255,255,255,0.025) 60px
+      );
+    pointer-events: none;
+  }
+  .hero-inner { max-width: 720px; position: relative; z-index: 1; }
+
+  .hero-tag {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    background: rgba(184,147,58,0.15);
+    border: 1px solid rgba(184,147,58,0.4);
+    color: var(--gold-lt);
+    font-size: 0.78rem;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    padding: 0.35rem 0.9rem;
+    border-radius: 2px;
+    margin-bottom: 1.8rem;
+    text-transform: uppercase;
+  }
+  .hero-tag::before {
+    content: '';
+    width: 6px; height: 6px;
+    background: var(--gold-lt);
+    border-radius: 50%;
+    flex-shrink: 0;
+  }
+
+  h1 {
+    font-family: 'IBM Plex Sans Arabic', sans-serif;
+    font-size: clamp(2rem, 5vw, 3.2rem);
+    font-weight: 700;
+    line-height: 1.3;
+    margin-bottom: 1.4rem;
+    color: var(--white);
+  }
+  h1 em {
+    font-style: normal;
+    color: var(--gold-lt);
+  }
+
+  .hero-sub {
+    font-size: clamp(1rem, 2vw, 1.15rem);
+    font-weight: 300;
+    color: rgba(255,255,255,0.72);
+    max-width: 580px;
+    margin-bottom: 2.5rem;
+    line-height: 1.85;
+  }
+
+  .hero-actions { display: flex; gap: 1rem; flex-wrap: wrap; }
+
+  .btn-primary {
+    background: var(--gold);
+    color: var(--white);
+    padding: 0.85rem 2rem;
+    border-radius: 3px;
+    font-size: 0.95rem;
+    font-weight: 600;
+    text-decoration: none;
+    transition: background 0.2s, transform 0.15s;
+    display: inline-block;
+  }
+  .btn-primary:hover { background: var(--gold-lt); transform: translateY(-1px); }
+
+  .btn-ghost {
+    border: 1px solid rgba(255,255,255,0.3);
+    color: rgba(255,255,255,0.85);
+    padding: 0.85rem 1.8rem;
+    border-radius: 3px;
+    font-size: 0.95rem;
+    font-weight: 500;
+    text-decoration: none;
+    transition: border-color 0.2s, color 0.2s;
+    display: inline-block;
+  }
+  .btn-ghost:hover { border-color: var(--gold-lt); color: var(--gold-lt); }
+
+  /* ── STATS STRIP ── */
+  .stats-strip {
+    background: var(--white);
+    border-bottom: 1px solid var(--stone);
+    display: flex;
+    justify-content: center;
+    gap: 0;
+    flex-wrap: wrap;
+  }
+  .stat {
+    flex: 1;
+    min-width: 160px;
+    max-width: 260px;
+    padding: 2rem 1.5rem;
+    text-align: center;
+    border-left: 1px solid var(--stone);
+  }
+  .stat:last-child { border-left: none; }
+  .stat-num {
+    font-size: 2.2rem;
+    font-weight: 700;
+    color: var(--gold);
+    line-height: 1;
+    margin-bottom: 0.4rem;
+  }
+  .stat-label {
+    font-size: 0.82rem;
+    color: var(--muted);
+    font-weight: 500;
+  }
+
+  /* ── SECTIONS ── */
+  section { padding: 5.5rem 6vw; }
+
+  .section-label {
+    display: inline-block;
+    font-size: 0.72rem;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--gold);
+    border-bottom: 2px solid var(--gold);
+    padding-bottom: 0.3rem;
+    margin-bottom: 1.2rem;
+  }
+  h2 {
+    font-size: clamp(1.6rem, 3.5vw, 2.4rem);
+    font-weight: 700;
+    line-height: 1.35;
+    margin-bottom: 1rem;
+    color: var(--ink);
+  }
+  .lead {
+    font-size: 1.05rem;
+    color: var(--muted);
+    max-width: 600px;
+    line-height: 1.9;
+    margin-bottom: 3rem;
+  }
+
+  /* ── ABOUT ── */
+  .about { background: var(--white); }
+  .about-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 4rem;
+    align-items: center;
+    max-width: 1100px;
+    margin: 0 auto;
+  }
+  .about-text p {
+    color: var(--muted);
+    font-size: 1rem;
+    line-height: 1.9;
+    margin-bottom: 1.2rem;
+  }
+  .about-text strong { color: var(--ink); font-weight: 600; }
+  .about-visual {
+    background: var(--ink);
+    border-radius: 4px;
+    padding: 3rem 2.5rem;
+    color: var(--white);
+    position: relative;
+    overflow: hidden;
+  }
+  .about-visual::before {
+    content: '';
+    position: absolute;
+    top: -40px; left: -40px;
+    width: 200px; height: 200px;
+    border: 1px solid rgba(184,147,58,0.2);
+    border-radius: 50%;
+  }
+  .about-visual-quote {
+    font-size: 1.15rem;
+    font-weight: 300;
+    line-height: 1.8;
+    color: rgba(255,255,255,0.85);
+    position: relative;
+    z-index: 1;
+    margin-bottom: 1.5rem;
+  }
+  .about-visual-cite {
+    font-size: 0.8rem;
+    color: var(--gold-lt);
+    font-weight: 600;
+    letter-spacing: 0.04em;
+  }
+
+  /* ── SERVICES ── */
+  .services { background: var(--paper); }
+  .services-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 1.5rem;
+    max-width: 1100px;
+    margin: 0 auto;
+  }
+  .service-card {
+    background: var(--white);
+    border: 1px solid var(--stone);
+    border-radius: 4px;
+    padding: 2.5rem 2rem;
+    transition: box-shadow 0.25s, transform 0.2s;
+    position: relative;
+    overflow: hidden;
+  }
+  .service-card::after {
+    content: '';
+    position: absolute;
+    bottom: 0; right: 0; left: 0;
+    height: 3px;
+    background: var(--gold);
+    transform: scaleX(0);
+    transform-origin: right;
+    transition: transform 0.3s ease;
+  }
+  .service-card:hover { box-shadow: 0 8px 32px rgba(13,17,23,0.1); transform: translateY(-3px); }
+  .service-card:hover::after { transform: scaleX(1); }
+
+  .service-icon {
+    width: 48px; height: 48px;
+    background: rgba(184,147,58,0.1);
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 1.4rem;
+    font-size: 1.4rem;
+  }
+  .service-card h3 {
+    font-size: 1.15rem;
+    font-weight: 700;
+    color: var(--ink);
+    margin-bottom: 0.75rem;
+  }
+  .service-card p {
+    font-size: 0.9rem;
+    color: var(--muted);
+    line-height: 1.85;
+  }
+
+  /* ── WHY US ── */
+  .why { background: var(--ink); color: var(--white); }
+  .why h2 { color: var(--white); }
+  .why .section-label { color: var(--gold-lt); border-color: var(--gold-lt); }
+  .why .lead { color: rgba(255,255,255,0.6); }
+  .why-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 2rem;
+    max-width: 1100px;
+    margin: 0 auto;
+  }
+  .why-item {
+    border-top: 1px solid rgba(255,255,255,0.12);
+    padding-top: 1.5rem;
+  }
+  .why-item-num {
+    font-size: 2rem;
+    font-weight: 700;
+    color: var(--gold);
+    line-height: 1;
+    margin-bottom: 0.8rem;
+  }
+  .why-item h4 {
+    font-size: 0.95rem;
+    font-weight: 600;
+    color: var(--white);
+    margin-bottom: 0.5rem;
+  }
+  .why-item p {
+    font-size: 0.85rem;
+    color: rgba(255,255,255,0.55);
+    line-height: 1.8;
+  }
+
+  /* ── CTA SECTION ── */
+  .cta-section {
+    background: var(--paper);
+    text-align: center;
+    padding: 6rem 6vw;
+  }
+  .cta-box {
+    background: var(--white);
+    border: 1px solid var(--stone);
+    border-radius: 6px;
+    padding: 4rem 3rem;
+    max-width: 700px;
+    margin: 0 auto;
+    box-shadow: 0 4px 40px rgba(13,17,23,0.06);
+  }
+  .cta-box h2 { margin-bottom: 0.8rem; }
+  .cta-box p { color: var(--muted); margin-bottom: 2rem; font-size: 1rem; }
+  .cta-contact-line {
+    display: flex;
+    justify-content: center;
+    gap: 1rem;
+    flex-wrap: wrap;
+    margin-top: 1.5rem;
+  }
+  .contact-chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    background: var(--paper);
+    border: 1px solid var(--stone);
+    border-radius: 3px;
+    padding: 0.55rem 1.1rem;
+    font-size: 0.85rem;
+    color: var(--muted);
+    text-decoration: none;
+    transition: border-color 0.2s, color 0.2s;
+  }
+  .contact-chip:hover { border-color: var(--gold); color: var(--gold); }
+
+  /* ── FOOTER ── */
+  footer {
+    background: #080B0F;
+    color: rgba(255,255,255,0.4);
+    text-align: center;
+    font-size: 0.78rem;
+    padding: 1.8rem 2rem;
+    line-height: 1.9;
+  }
+  footer span { color: var(--gold); }
+
+  /* ── RESPONSIVE ── */
+  @media (max-width: 768px) {
+    .about-grid { grid-template-columns: 1fr; gap: 2.5rem; }
+    .stat { min-width: 140px; }
+    nav { padding: 0.9rem 1.2rem; }
+    section { padding: 4rem 1.2rem; }
+    .hero { padding: 5rem 1.2rem 4.5rem; }
+    .cta-box { padding: 2.5rem 1.5rem; }
+  }
+</style>
+</head>
+<body>
+
+<!-- TOP BAR -->
+<div class="topbar">
+  خبرة تجاوزت <span>7 أعوام</span> في الاستشارات المالية والضريبية بالسوق السعودي
+</div>
+
+<!-- NAV -->
+<nav>
+  <div class="nav-logo">
+    MG Business Consultancy
+    <small>MGBC.SA — استشارات أعمال</small>
+  </div>
+  <a href="#contact" class="nav-cta">تواصل معنا</a>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-inner">
+    <div class="hero-tag">استشارات مالية · ضريبية · دراسات جدوى</div>
+    <h1>
+      قرارات مالية واثقة<br>
+      في <em>السوق السعودي</em>
+    </h1>
+    <p class="hero-sub">
+      في Mahmoud Gharbi Business Consultancy نقدم استشارات مالية وضريبية ودراسات جدوى مبنية على معرفة عميقة بالبيئة التنظيمية والتشغيلية في المملكة العربية السعودية.
+      نعمل مع عملائنا كشركاء في القرار، لا مجرد مقدمي خدمة.
+    </p>
+    <div class="hero-actions">
+      <a href="#contact" class="btn-primary">ابدأ الاستشارة</a>
+      <a href="#services" class="btn-ghost">اطلع على خدماتنا</a>
+    </div>
+  </div>
+</section>
+
+<!-- STATS -->
+<div class="stats-strip">
+  <div class="stat">
+    <div class="stat-num">+7</div>
+    <div class="stat-label">سنوات خبرة في السوق السعودي</div>
+  </div>
+  <div class="stat">
+    <div class="stat-num">3</div>
+    <div class="stat-label">خدمات تخصصية متكاملة</div>
+  </div>
+  <div class="stat">
+    <div class="stat-num">SA</div>
+    <div class="stat-label">متخصصون في البيئة التنظيمية السعودية</div>
+  </div>
+</div>
+
+<!-- ABOUT -->
+<section class="about" id="about">
+  <div class="about-grid">
+    <div class="about-text">
+      <div class="section-label">من نحن</div>
+      <h2>شركاؤك في الوضوح المالي</h2>
+      <p>
+        <strong>MG Business Consultancy (MGBC)</strong> شركة استشارات متخصصة تعمل في السوق السعودي منذ أكثر من سبع سنوات. نقدم خدماتنا للشركات والمستثمرين الذين يحتاجون إلى فهم حقيقي لبيئة الأعمال المحلية قبل اتخاذ قراراتهم.
+      </p>
+      <p>
+        نتميز بمعرفة متعمقة باللوائح الضريبية والمالية السارية في المملكة، مما يمكّننا من تقديم استشارات عملية ومباشرة تنعكس فعلياً على أداء أعمالك.
+      </p>
+    </div>
+    <div class="about-visual">
+      <div class="about-visual-quote">
+        "نؤمن أن الاستشارة الجيدة لا تُقدِّم إجابات جاهزة، بل تبني لدى العميل القدرة على اتخاذ قرارات مالية مستنيرة ومستدامة."
+      </div>
+      <div class="about-visual-cite">MG Business Consultancy — mgbc.sa</div>
+    </div>
+  </div>
+</section>
+
+<!-- SERVICES -->
+<section class="services" id="services">
+  <div style="max-width:1100px; margin:0 auto;">
+    <div class="section-label">خدماتنا</div>
+    <h2>ما الذي نقدمه</h2>
+    <p class="lead">
+      خدمات متخصصة تغطي المحاور الأساسية التي يحتاجها كل مشروع في مرحلة التأسيس أو التوسع داخل السوق السعودي.
+    </p>
+    <div class="services-grid">
+
+      <div class="service-card">
+        <div class="service-icon">💼</div>
+        <h3>الاستشارات المالية</h3>
+        <p>
+          تحليل الوضع المالي، هيكلة التدفقات النقدية، ومراجعة القرارات الاستثمارية. نساعدك على قراءة أرقامك بوضوح والتخطيط المالي بثقة.
+        </p>
+      </div>
+
+      <div class="service-card">
+        <div class="service-icon">📊</div>
+        <h3>الاستشارات الضريبية</h3>
+        <p>
+          الالتزام الضريبي وفق الأنظمة السعودية، فهم متطلبات هيئة الزكاة والضريبة والجمارك، وتنظيم الوضع الضريبي لشركتك بصورة سليمة ومنضبطة.
+        </p>
+      </div>
+
+      <div class="service-card">
+        <div class="service-icon">📋</div>
+        <h3>دراسات الجدوى</h3>
+        <p>
+          دراسة متكاملة تغطي الجوانب التسويقية والمالية والتشغيلية لمشروعك، تمنحك رؤية واضحة قبل الخطوة الأولى — لا بعدها.
+        </p>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- WHY US -->
+<section class="why" id="why">
+  <div style="max-width:1100px; margin:0 auto;">
+    <div class="section-label">لماذا MGBC</div>
+    <h2>ما يُميّزنا في السوق السعودي</h2>
+    <p class="lead">أرقام وحقائق تتحدث بدلاً منا.</p>
+    <div class="why-grid">
+      <div class="why-item">
+        <div class="why-item-num">01</div>
+        <h4>خبرة محلية حقيقية</h4>
+        <p>أكثر من 7 سنوات من العمل الفعلي داخل السوق السعودي، لا مجرد معرفة نظرية.</p>
+      </div>
+      <div class="why-item">
+        <div class="why-item-num">02</div>
+        <h4>إلمام بالبيئة التنظيمية</h4>
+        <p>فهم دقيق للأنظمة واللوائح الضريبية والمالية السارية في المملكة.</p>
+      </div>
+      <div class="why-item">
+        <div class="why-item-num">03</div>
+        <h4>تخصص لا تعميم</h4>
+        <p>نركز على ما نُتقنه: الاستشارات المالية والضريبية ودراسات الجدوى — دون تشتيت.</p>
+      </div>
+      <div class="why-item">
+        <div class="why-item-num">04</div>
+        <h4>وضوح في التوصيات</h4>
+        <p>تحصل على آراء واضحة وقابلة للتطبيق، لا تقارير مطولة بلا قيمة عملية.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CTA -->
+<section class="cta-section" id="contact">
+  <div class="cta-box">
+    <div class="section-label">تواصل معنا</div>
+    <h2>هل لديك سؤال أو مشروع تريد استشارة حوله؟</h2>
+    <p>نرحب بكل استفسار. تواصل معنا وسنرد في أقرب وقت ممكن.</p>
+    <a href="mailto:info@mgbc.sa" class="btn-primary">راسلنا عبر البريد الإلكتروني</a>
+    <div class="cta-contact-line">
+      <a href="https://mgbc.sa" class="contact-chip">🌐 mgbc.sa</a>
+      <a href="mailto:info@mgbc.sa" class="contact-chip">✉️ info@mgbc.sa</a>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div>
+    <strong style="color:rgba(255,255,255,0.7);">MG Business Consultancy</strong> — MGBC.SA
+  </div>
+  <div style="margin-top:0.4rem;">
+    استشارات مالية · ضريبية · دراسات جدوى &nbsp;|&nbsp; المملكة العربية السعودية
+  </div>
+  <div style="margin-top:0.5rem; font-size:0.72rem;">
+    © 2025 <span>MGBC</span>. جميع الحقوق محفوظة.
+  </div>
+</footer>
+
+</body>
+</html>
