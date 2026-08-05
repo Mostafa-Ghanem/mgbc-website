@@ -1,88 +1,88 @@
 (() => {
+  const body = document.body;
   const header = document.querySelector('.site-header');
-  const backToTop = document.querySelector('.back-to-top');
-  const menuButton = document.querySelector('.menu-toggle');
-  const mobileMenu = document.getElementById('mobile-menu');
+  const menu = document.getElementById('mobile-menu');
+  const menuToggle = document.querySelector('.menu-toggle');
+  const menuClose = document.querySelector('.menu-close');
+  const menuLinks = menu?.querySelectorAll('a') ?? [];
   const year = document.getElementById('year');
-
-  const onScroll = () => {
-    const active = window.scrollY > 20;
-    header?.classList.toggle('scrolled', active);
-    backToTop?.classList.toggle('visible', window.scrollY > 500);
-  };
-  onScroll();
-  window.addEventListener('scroll', onScroll, { passive: true });
+  let lastFocused = null;
 
   if (year) year.textContent = new Date().getFullYear();
 
-  menuButton?.addEventListener('click', () => {
-    const expanded = menuButton.getAttribute('aria-expanded') === 'true';
-    menuButton.setAttribute('aria-expanded', String(!expanded));
-    menuButton.setAttribute('aria-label', expanded ? 'فتح القائمة' : 'إغلاق القائمة');
-    mobileMenu.hidden = expanded;
+  const openMenu = () => {
+    if (!menu || !menuToggle) return;
+    lastFocused = document.activeElement;
+    menu.hidden = false;
+    body.classList.add('menu-open');
+    menuToggle.setAttribute('aria-expanded', 'true');
+    menuToggle.setAttribute('aria-label', 'إغلاق القائمة');
+    window.requestAnimationFrame(() => menuClose?.focus());
+  };
+
+  const closeMenu = () => {
+    if (!menu || !menuToggle) return;
+    menu.hidden = true;
+    body.classList.remove('menu-open');
+    menuToggle.setAttribute('aria-expanded', 'false');
+    menuToggle.setAttribute('aria-label', 'فتح القائمة');
+    if (lastFocused instanceof HTMLElement) lastFocused.focus();
+  };
+
+  menuToggle?.addEventListener('click', () => {
+    if (menu?.hidden) openMenu(); else closeMenu();
+  });
+  menuClose?.addEventListener('click', closeMenu);
+  menu?.addEventListener('click', (event) => {
+    if (event.target === menu) closeMenu();
+  });
+  menuLinks.forEach((link) => link.addEventListener('click', closeMenu));
+  document.addEventListener('keydown', (event) => {
+    if (event.key === 'Escape' && menu && !menu.hidden) closeMenu();
+  });
+  window.addEventListener('resize', () => {
+    if (window.innerWidth > 960 && menu && !menu.hidden) closeMenu();
   });
 
-  mobileMenu?.querySelectorAll('a').forEach((link) => {
-    link.addEventListener('click', () => {
-      mobileMenu.hidden = true;
-      menuButton?.setAttribute('aria-expanded', 'false');
-      menuButton?.setAttribute('aria-label', 'فتح القائمة');
-    });
-  });
-
-  document.querySelectorAll('details').forEach((detail) => {
-    detail.addEventListener('toggle', () => {
-      if (!detail.open) return;
-      document.querySelectorAll('details[open]').forEach((other) => {
-        if (other !== detail) other.open = false;
-      });
-    });
-  });
-
-  const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-  const revealItems = document.querySelectorAll('.reveal');
+  const revealItems = document.querySelectorAll('[data-reveal]');
   revealItems.forEach((item) => {
-    const delay = item.dataset.delay;
+    const delay = item.getAttribute('data-delay');
     if (delay) item.style.setProperty('--delay', `${delay}ms`);
   });
 
-  if (!prefersReducedMotion && 'IntersectionObserver' in window) {
-    const observer = new IntersectionObserver((entries, obs) => {
+  if ('IntersectionObserver' in window && !window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+    const observer = new IntersectionObserver((entries, currentObserver) => {
       entries.forEach((entry) => {
         if (!entry.isIntersecting) return;
         entry.target.classList.add('is-visible');
-        obs.unobserve(entry.target);
+        currentObserver.unobserve(entry.target);
       });
-    }, { threshold: 0.13, rootMargin: '0px 0px -40px' });
+    }, { threshold: 0.12, rootMargin: '0px 0px -40px' });
     revealItems.forEach((item) => observer.observe(item));
   } else {
     revealItems.forEach((item) => item.classList.add('is-visible'));
   }
 
-  const counters = document.querySelectorAll('[data-count]');
-  const runCounter = (element) => {
-    const target = Number(element.dataset.count || 0);
-    const duration = 900;
-    const start = performance.now();
-    const tick = (now) => {
-      const progress = Math.min((now - start) / duration, 1);
-      const eased = 1 - Math.pow(1 - progress, 3);
-      element.textContent = String(Math.round(target * eased));
-      if (progress < 1) requestAnimationFrame(tick);
-    };
-    requestAnimationFrame(tick);
-  };
+  const navLinks = [...document.querySelectorAll('.desktop-nav a[href^="#"]')];
+  const sections = navLinks
+    .map((link) => document.querySelector(link.getAttribute('href')))
+    .filter(Boolean);
 
-  if ('IntersectionObserver' in window) {
-    const counterObserver = new IntersectionObserver((entries, obs) => {
-      entries.forEach((entry) => {
-        if (!entry.isIntersecting) return;
-        runCounter(entry.target);
-        obs.unobserve(entry.target);
-      });
-    }, { threshold: .7 });
-    counters.forEach((counter) => counterObserver.observe(counter));
-  } else {
-    counters.forEach(runCounter);
+  if ('IntersectionObserver' in window && sections.length) {
+    const navObserver = new IntersectionObserver((entries) => {
+      const visible = entries
+        .filter((entry) => entry.isIntersecting)
+        .sort((a, b) => b.intersectionRatio - a.intersectionRatio)[0];
+      if (!visible) return;
+      navLinks.forEach((link) => link.classList.toggle('is-active', link.getAttribute('href') === `#${visible.target.id}`));
+    }, { rootMargin: '-30% 0px -60% 0px', threshold: [0.05, 0.3] });
+    sections.forEach((section) => navObserver.observe(section));
   }
+
+  let lastScroll = 0;
+  window.addEventListener('scroll', () => {
+    const current = window.scrollY;
+    header?.classList.toggle('is-scrolled', current > 12);
+    lastScroll = current;
+  }, { passive: true });
 })();
