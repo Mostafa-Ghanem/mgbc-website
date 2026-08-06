@@ -1,0 +1,11 @@
+# Pre-deployment QA
+- Build and Astro check pass.
+- No horizontal overflow at 390, 768, 1024, 1440px.
+- Mobile menu opens, closes, traps no content, and closes with Escape.
+- One H1 per page; headings follow hierarchy.
+- Focus states visible and contrast meets WCAG AA.
+- No broken internal links or missing images.
+- Consultation assessment validates, scores, restarts, and passes data to the booking provider.
+- When booking URL is blank, email fallback is usable and no broken embed appears.
+- Sitemap, robots, canonical, OG, and structured data are present.
+- No unsupported claims, fake testimonials, or fabricated logos.

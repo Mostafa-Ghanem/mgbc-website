@@ -1,0 +1,4 @@
+---
+import BaseLayout from '@/layouts/BaseLayout.astro';import PageHero from '@/components/PageHero.astro';import ServiceCard from '@/components/ServiceCard.astro';import CTA from '@/components/CTA.astro';import {getCollection} from 'astro:content';const services=(await getCollection('services')).sort((a,b)=>a.data.order-b.data.order);
+---
+<BaseLayout title="الخدمات" description="خدمات MGBC في الاستشارات المالية والاستشارات الضريبية ودراسات الجدوى في المملكة العربية السعودية."><PageHero eyebrow="خدماتنا" title="خبرة متخصصة لقرارات أكثر ثقة" description="نبدأ من التحدي الفعلي ونبني نطاقًا واضحًا للخدمة ومخرجات يمكن للإدارة استخدامها في القرار والتنفيذ."/><section class="section"><div class="container"><div class="cards-grid">{services.map((s)=><ServiceCard title={s.data.title} summary={s.data.summary} slug={s.data.slug} icon={s.data.icon}/>)}</div></div></section><CTA/></BaseLayout>

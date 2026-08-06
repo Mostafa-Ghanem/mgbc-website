@@ -1,0 +1,133 @@
+media:
+  input: public/uploads
+  output: /uploads
+
+components:
+  seo:
+    type: object
+    label: إعدادات SEO
+    fields:
+      - name: title
+        label: عنوان محركات البحث
+        type: string
+        required: true
+      - name: description
+        label: وصف محركات البحث
+        type: text
+        required: true
+        options: { maxlength: 170 }
+      - name: noindex
+        label: منع الفهرسة
+        type: boolean
+
+content:
+  - name: site
+    label: إعدادات الموقع والحجز
+    type: file
+    path: src/data/settings/site.json
+    format: json
+    operations: { delete: false }
+    fields:
+      - { name: name, label: اسم الشركة, type: string, required: true }
+      - { name: shortName, label: الاسم المختصر, type: string, required: true }
+      - { name: legalName, label: الاسم القانوني, type: string }
+      - { name: domain, label: رابط الموقع, type: string, required: true }
+      - { name: email, label: البريد الإلكتروني, type: string, required: true }
+      - { name: location, label: الموقع, type: string }
+      - { name: description, label: وصف الشركة, type: text, required: true }
+      - { name: experienceYears, label: سنوات الخبرة, type: number, required: true }
+      - name: booking
+        label: نظام حجز الاستشارات
+        type: object
+        fields:
+          - name: provider
+            label: مزود الحجز
+            type: select
+            options:
+              values:
+                - { value: calcom, label: Cal.com }
+                - { value: calendly, label: Calendly }
+          - { name: url, label: رابط الحدث أو نموذج التوجيه, type: string, description: "مثال: https://cal.com/yourname/consultation" }
+          - { name: duration, label: مدة الجلسة بالدقائق, type: number }
+          - { name: headline, label: عنوان العرض, type: string }
+          - { name: description, label: وصف الجلسة, type: text }
+          - { name: brandColor, label: لون الحجز, type: string }
+  - name: services
+    label: الخدمات
+    type: collection
+    path: src/content/services
+    filename: "{slug}.md"
+    view:
+      fields: [title, order, slug]
+      primary: title
+      sort: [order, title]
+      default: { sort: order, order: asc }
+    fields:
+      - { name: title, label: اسم الخدمة, type: string, required: true }
+      - { name: slug, label: الرابط المختصر, type: string, required: true, pattern: "^[a-z0-9-]+$" }
+      - { name: eyebrow, label: التصنيف القصير, type: string }
+      - { name: summary, label: الملخص, type: text, required: true }
+      - name: icon
+        label: الأيقونة
+        type: select
+        options:
+          values:
+            - { value: chart, label: مالي }
+            - { value: tax, label: ضريبي }
+            - { value: study, label: دراسة }
+      - { name: order, label: الترتيب, type: number }
+      - { name: outcomes, label: المخرجات, type: string, list: true }
+      - { name: process, label: خطوات التنفيذ, type: string, list: true }
+      - { name: audience, label: الفئة المناسبة, type: string, list: true }
+      - name: faq
+        label: الأسئلة الشائعة
+        type: object
+        list: { collapsible: { collapsed: true, summary: "{question}" } }
+        fields:
+          - { name: question, label: السؤال, type: string }
+          - { name: answer, label: الإجابة, type: text }
+      - { name: seo, component: seo }
+      - { name: body, label: محتوى الصفحة, type: rich-text }
+  - name: articles
+    label: المقالات والرؤى
+    type: collection
+    path: src/content/articles
+    filename: "{slug}.md"
+    view:
+      fields: [title, category, publishedAt, draft]
+      primary: title
+      sort: [publishedAt, title]
+      default: { sort: publishedAt, order: desc }
+      search: [title, category, excerpt]
+    fields:
+      - { name: title, label: العنوان, type: string, required: true }
+      - { name: slug, label: الرابط المختصر, type: string, required: true, pattern: "^[a-z0-9-]+$" }
+      - { name: excerpt, label: الملخص, type: text, required: true }
+      - { name: category, label: التصنيف, type: string }
+      - { name: publishedAt, label: تاريخ النشر, type: date, required: true }
+      - { name: updatedAt, label: تاريخ التحديث, type: date }
+      - { name: author, label: الكاتب, type: string }
+      - { name: featured, label: مقال مميز, type: boolean }
+      - { name: draft, label: مسودة, type: boolean }
+      - { name: seo, component: seo }
+      - { name: body, label: المحتوى, type: rich-text }
+  - name: faq
+    label: الأسئلة العامة
+    type: file
+    path: src/data/faqs.json
+    format: json
+    list: true
+    operations: { delete: false }
+    fields:
+      - { name: question, label: السؤال, type: string }
+      - { name: answer, label: الإجابة, type: text }
+
+settings:
+  content: { merge: true }
+  commit:
+    identity: user
+    templates:
+      create: "content(create): {path}"
+      update: "content(update): {path}"
+      delete: "content(delete): {path}"
+      rename: "content(rename): {oldPath} -> {newPath}"

@@ -1,0 +1,17 @@
+---
+import BaseLayout from '@/layouts/BaseLayout.astro';import PageHero from '@/components/PageHero.astro';import Icon from '@/components/Icon.astro';import site from '@/data/settings/site.json';
+---
+<BaseLayout title="تواصل معنا" description="تواصل مع MGBC لطلب استشارة مالية أو ضريبية أو دراسة جدوى في المملكة العربية السعودية."><PageHero eyebrow="تواصل معنا" title="حدثنا عن التحدي الذي تواجهه" description="سنراجع رسالتك ونحدد أفضل خطوة تالية، أو يمكنك البدء مباشرة بالتقييم المجاني وحجز جلسة التشخيص."/><section class="section"><div class="container contact-grid"><aside class="contact-card"><span class="eyebrow" style="color:var(--gold-300)">MGBC</span><h2 class="section-title" style="color:#fff;font-size:2.3rem">قناة مباشرة مع فريق الاستشارات</h2><p>أرسل نبذة عن نشاطك والتحدي الحالي. كلما كانت المعلومات محددة، استطعنا توجيهك بصورة أفضل.</p><p><strong>البريد:</strong><br/><a href={`mailto:${site.email}`}>{site.email}</a></p><p><strong>النطاق:</strong><br/>{site.location}</p><a class="btn btn--primary" href="/consultation"><Icon name="calendar"/>ابدأ التقييم واحجز جلسة</a></aside><div class="form-card"><h2 style="margin-top:0;color:var(--navy-950)">رسالة سريعة</h2><form id="contact-mail-form" class="form-grid" data-email={site.email}><div class="field"><label for="contact-name">الاسم</label><input id="contact-name" name="name" required/></div><div class="field"><label for="contact-email">البريد</label><input id="contact-email" name="email" type="email" required/></div><div class="field field--full"><label for="contact-subject">موضوع الاستشارة</label><select id="contact-subject" name="subject" required><option>استشارات مالية</option><option>استشارات ضريبية</option><option>دراسة جدوى</option><option>استفسار عام</option></select></div><div class="field field--full"><label for="contact-message">التفاصيل</label><textarea id="contact-message" name="message" required></textarea></div><div class="field--full"><button class="btn btn--dark" type="submit"><Icon name="mail"/>إرسال عبر البريد</button><p class="form-note">سيُفتح تطبيق البريد لديك مع تعبئة الرسالة تلقائيًا.</p></div></form></div></div></section><script is:inline>
+  document.querySelector('#contact-mail-form')?.addEventListener('submit', (event) => {
+    event.preventDefault();
+    const form = event.currentTarget;
+    const data = new FormData(form);
+    const email = form.dataset.email;
+    const subject = encodeURIComponent(`استشارة: ${data.get('subject')}`);
+    const body = encodeURIComponent(`الاسم: ${data.get('name')}
+البريد: ${data.get('email')}
+
+${data.get('message')}`);
+    location.href = `mailto:${email}?subject=${subject}&body=${body}`;
+  });
+</script></BaseLayout>

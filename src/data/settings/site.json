@@ -1,0 +1,22 @@
+{
+  "name": "MG Business Consultancy",
+  "shortName": "MGBC",
+  "legalName": "Mahmoud Gharbi Business Consultancy",
+  "domain": "https://mgbc.sa",
+  "email": "info@mgbc.sa",
+  "location": "المملكة العربية السعودية",
+  "description": "استشارات مالية وضريبية ودراسات جدوى مبنية على معرفة عميقة بالسوق السعودي.",
+  "experienceYears": 7,
+  "booking": {
+    "provider": "calcom",
+    "url": "",
+    "duration": 30,
+    "headline": "جلسة تشخيص مالي وضريبي مجانية",
+    "description": "نراجع وضعك الحالي ونحدد الأولويات والخطوة التالية خلال 30 دقيقة.",
+    "brandColor": "#DFAE45"
+  },
+  "social": {
+    "linkedin": "",
+    "x": ""
+  }
+}

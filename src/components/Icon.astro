@@ -1,0 +1,11 @@
+---
+interface Props { name: 'arrow'|'calendar'|'mail'|'menu'|'close'|'check'|'chart'|'tax'|'study'|'chevron'; class?: string }
+const { name, class: className = 'icon' } = Astro.props;
+const paths: Record<string,string> = {
+  arrow:'M5 12h14M13 6l6 6-6 6', calendar:'M6 2v4m12-4v4M3 9h18M5 4h14a2 2 0 0 1 2 2v14H3V6a2 2 0 0 1 2-2Z',
+  mail:'M3 5h18v14H3V5Zm0 2 9 6 9-6', menu:'M4 7h16M4 12h16M4 17h16', close:'m6 6 12 12M18 6 6 18',
+  check:'m5 12 4 4L19 6', chart:'M4 19V9m6 10V5m6 14v-7m4 7H2', tax:'M7 3h10v18H7V3Zm3 4h4m-4 4h4m-4 4h2',
+  study:'M4 19V5a2 2 0 0 1 2-2h12v16H6a2 2 0 0 0-2 2Zm0 0a2 2 0 0 1 2-2h12', chevron:'m9 18 6-6-6-6'
+};
+---
+<svg class={className} viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d={paths[name]} /></svg>

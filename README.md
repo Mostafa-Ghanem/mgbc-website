@@ -1,18 +1,31 @@
-# MGBC Website
+# MGBC Astro + Pages CMS
 
-موقع عربي RTL لشركة MG Business Consultancy مبني كصفحة ثابتة خفيفة وسريعة.
+Production-oriented Arabic RTL website for MG Business Consultancy.
 
-## التصميم
-- Mobile-first وRTL كامل.
-- شبكة 1200px مع 24px gutters على سطح المكتب و16px على الجوال.
-- ألوان كحلي وذهبي مستلهمة من هوية MGBC.
-- Tajawal للنص العربي.
-- مكونات متجاوبة وإتاحة لوحة المفاتيح وتقليل الحركة.
+## Stack
+- Astro 7 static output
+- Astro Content Collections
+- Pages CMS (Git-backed)
+- GitHub + Cloudflare Pages / GitHub Pages-compatible static output
+- Provider-agnostic consultation booking (Cal.com recommended, Calendly supported)
 
-## الملفات
-- `index.html`
-- `styles.css`
-- `script.js`
-- `404.html`
-- `robots.txt`
-- `sitemap.xml`
+## Local development
+```bash
+npm install
+npm run dev
+npm run check
+npm run build
+```
+
+## Booking activation
+Edit `src/data/settings/site.json` through Pages CMS:
+1. Set `booking.provider` to `calcom` or `calendly`.
+2. Paste the public event or routing-form URL into `booking.url`.
+3. Save. The consultation assessment will prefill lead information and UTM source into the booking experience.
+
+Recommended Cal.com event: 30-minute hidden or public event named `financial-diagnostic`, with booking questions for company, service, and challenge.
+
+## Deployment
+Build command: `npm run build`
+Output directory: `dist`
+Node: `22.12+`

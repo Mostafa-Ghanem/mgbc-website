@@ -1,0 +1,36 @@
+---
+import { navigation } from '@/data/navigation';
+import Icon from './Icon.astro';
+const current = Astro.url.pathname;
+---
+<a class="skip-link" href="#main-content">تخطَّ إلى المحتوى</a>
+<header class="site-header">
+  <div class="container header-inner">
+    <a class="brand" href="/" aria-label="MGBC الرئيسية">
+      <img src="/images/mgbc-logo-mark.png" width="619" height="484" alt="شعار MGBC" />
+      <span class="brand-copy"><strong>MGBC</strong><span>Business Consultancy</span></span>
+    </a>
+    <nav class="desktop-nav" aria-label="التنقل الرئيسي">
+      {navigation.map((item) => <a class="nav-link" href={item.href} aria-current={current === item.href ? 'page' : undefined}>{item.label}</a>)}
+    </nav>
+    <div class="header-actions">
+      <a class="btn btn--primary" href="/consultation"><Icon name="calendar" />احجز استشارة مجانية</a>
+      <button class="menu-toggle" type="button" aria-label="فتح القائمة" aria-expanded="false" aria-controls="mobile-menu"><Icon name="menu" /></button>
+    </div>
+  </div>
+  <div class="mobile-panel" id="mobile-menu" aria-hidden="true">
+    <nav class="mobile-nav" aria-label="التنقل على الهاتف">
+      {navigation.map((item) => <a href={item.href}>{item.label}</a>)}
+    </nav>
+    <a class="btn btn--primary" href="/consultation"><Icon name="calendar" />احجز استشارة مجانية</a>
+  </div>
+</header>
+<script is:inline>
+  const button = document.querySelector('.menu-toggle');
+  const panel = document.querySelector('.mobile-panel');
+  const iconPath = button?.querySelector('path');
+  const close = () => { panel?.classList.remove('is-open'); panel?.setAttribute('aria-hidden','true'); button?.setAttribute('aria-expanded','false'); document.body.classList.remove('menu-open'); if(iconPath) iconPath.setAttribute('d','M4 7h16M4 12h16M4 17h16'); };
+  button?.addEventListener('click',()=>{ const open=!panel?.classList.contains('is-open'); panel?.classList.toggle('is-open',open); panel?.setAttribute('aria-hidden',String(!open)); button.setAttribute('aria-expanded',String(open)); document.body.classList.toggle('menu-open',open); if(iconPath) iconPath.setAttribute('d',open?'m6 6 12 12M18 6 6 18':'M4 7h16M4 12h16M4 17h16'); });
+  document.addEventListener('keydown',(event)=>{ if(event.key==='Escape') close(); });
+  panel?.querySelectorAll('a').forEach((link)=>link.addEventListener('click',close));
+</script>

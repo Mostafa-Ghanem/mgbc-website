@@ -1,0 +1,12 @@
+---
+import site from '@/data/settings/site.json';
+interface Props { title?:string; description?:string; image?:string; type?:'website'|'article'; noindex?:boolean; jsonLd?:Record<string,unknown>|Record<string,unknown>[] }
+const { title=site.shortName, description=site.description, image='/images/og-default.svg', type='website', noindex=false, jsonLd } = Astro.props;
+const canonical = new URL(Astro.url.pathname, site.domain).toString();
+const fullTitle = title.includes('MGBC') ? title : `${title} | MGBC`;
+---
+<title>{fullTitle}</title><meta name="description" content={description} /><link rel="canonical" href={canonical} />
+<meta name="robots" content={noindex?'noindex,nofollow':'index,follow,max-image-preview:large'} />
+<meta property="og:type" content={type} /><meta property="og:site_name" content="MGBC" /><meta property="og:title" content={fullTitle} /><meta property="og:description" content={description} /><meta property="og:url" content={canonical} /><meta property="og:image" content={new URL(image,site.domain).toString()} />
+<meta name="twitter:card" content="summary_large_image" /><meta name="twitter:title" content={fullTitle} /><meta name="twitter:description" content={description} /><meta name="twitter:image" content={new URL(image,site.domain).toString()} />
+{jsonLd && <script type="application/ld+json" set:html={JSON.stringify(jsonLd)}></script>}

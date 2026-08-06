@@ -1,0 +1,17 @@
+---
+import site from '@/data/settings/site.json';
+import { navigation } from '@/data/navigation';
+---
+<footer class="site-footer">
+  <div class="container">
+    <div class="footer-grid">
+      <div class="footer-brand">
+        <a class="brand" href="/"><img src="/images/mgbc-logo-mark.png" width="619" height="484" alt="" /><span class="brand-copy"><strong style="color:#fff">MGBC</strong><span>Business Consultancy</span></span></a>
+        <p>{site.description} نعمل مع عملائنا كشركاء في القرار، لا مجرد مقدمي خدمة.</p>
+      </div>
+      <div><div class="footer-title">روابط سريعة</div><nav class="footer-links">{navigation.map((item)=><a href={item.href}>{item.label}</a>)}</nav></div>
+      <div><div class="footer-title">تواصل معنا</div><div class="footer-links"><a href={`mailto:${site.email}`}>{site.email}</a><span>{site.location}</span><a href="/consultation">جلسة تشخيص مجانية</a></div></div>
+    </div>
+    <div class="footer-bottom"><span>© {new Date().getFullYear()} MGBC. جميع الحقوق محفوظة.</span><span><a href="/privacy">سياسة الخصوصية</a> · <a href="/terms">الشروط والأحكام</a></span></div>
+  </div>
+</footer>
