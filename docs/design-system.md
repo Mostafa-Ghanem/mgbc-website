@@ -2,7 +2,11 @@
 - Container: 1200px; gutters 24px desktop and 16px mobile.
 - Colors: Navy `#061D35`, Navy `#0B2C4D`, Gold `#DFAE45`, Gold light `#F1C768`, Surface `#F7F9FC`.
 - Arabic typography: Tajawal. English/data typography: Manrope.
+- Body floor: 16px; ordinary prose measure 65–72ch.
 - Hero title: 56–64px desktop, 36–44px mobile.
-- Button radius: 14px. Card radius: 20px. Hero radius: 28px.
-- Motion: opacity/transform only; 150–300ms interactions; reduced motion respected.
+- Button radius: 14px. General content radius: 16px. Hero radius: 26px.
+- Spacing scale: 4, 8, 12, 16, 24, 32, 48, 64, 96, 128px. Related content stays tight; major groups separate generously.
+- Motion: transform/opacity only for purposeful interaction; 150–300ms; reduced motion respected.
 - Icons: inline SVG only; no emoji icons in UI controls.
+- Images: editorial/contextual, never decorative filler. Hero remains image-free apart from the brand mark.
+- Avoid visual kickers/eyebrows above headings, decorative hero metrics, generic card grids, decorative grids, glass effects, and unsupported claims.

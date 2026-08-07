@@ -1,11 +1,14 @@
 # Pre-deployment QA
 - Build and Astro check pass.
 - No horizontal overflow at 390, 768, 1024, 1440px.
-- Mobile menu opens, closes, traps no content, and closes with Escape.
-- One H1 per page; headings follow hierarchy.
+- Mobile menu opens, closes, hidden links are inert, and Escape returns focus to the trigger.
+- One H1 per page; headings follow hierarchy and wrap without clipping.
 - Focus states visible and contrast meets WCAG AA.
-- No broken internal links or missing images.
-- Consultation assessment validates, scores, restarts, and passes data to the booking provider.
-- When booking URL is blank, email fallback is usable and no broken embed appears.
+- Forms expose labels, correct input types, autocomplete, loading, success, and recoverable error states.
+- Consultation assessment validates, scores, restarts, preserves inputs on a failed request, and stores a lead through `/api/leads`.
+- Contact form stores a lead through `/api/leads` and exposes email only as a fallback.
+- When booking URL is blank, no booking embed or broken calendar action is rendered.
+- No broken internal links or missing images; below-fold images have dimensions and lazy loading.
 - Sitemap, robots, canonical, OG, and structured data are present.
 - No unsupported claims, fake testimonials, or fabricated logos.
+- Final UI review applies Impeccable layout/typeset/harden/polish principles and the current Vercel Web Interface Guidelines.
