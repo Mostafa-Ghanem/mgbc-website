@@ -1,6 +1,4 @@
 ---
-import Icon from './Icon.astro';
-interface Props { title?:string; copy?:string }
-const { title='حوّل الأرقام إلى قرار واضح', copy='ابدأ بجلسة تشخيص مجانية لمدة 30 دقيقة نحدد خلالها التحدي الرئيسي والخطوة العملية التالية.' }=Astro.props;
+import Icon from './Icon.astro';interface Props {title?:string;copy?:string}const {title='حوّل الأرقام إلى قرار واضح',copy='ابدأ بتقييم مجاني قصير يوضح وضعك الحالي ويحدد الأولوية التي تستحق النقاش أولًا.'}=Astro.props;
 ---
-<section class="section"><div class="container"><div class="cta-shell reveal"><div><h2>{title}</h2><p>{copy}</p></div><a class="btn btn--primary" href="/consultation"><Icon name="calendar" />ابدأ التقييم واحجز موعدك</a></div></div></section>
+<section class="section"><div class="container"><div class="cta-shell"><div><h2>{title}</h2><p>{copy}</p></div><a class="btn btn--primary" href="/consultation"><Icon name="arrow"/>ابدأ التقييم المجاني</a></div></div></section>

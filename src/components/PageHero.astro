@@ -1,5 +1,5 @@
 ---
 interface Props { eyebrow?:string; title:string; description:string; parent?:{label:string;href:string} }
-const { eyebrow, title, description, parent }=Astro.props;
+const { title, description, parent }=Astro.props;
 ---
-<section class="page-hero"><div class="container"><nav class="breadcrumbs" aria-label="مسار الصفحة"><a href="/">الرئيسية</a><span>/</span>{parent && <><a href={parent.href}>{parent.label}</a><span>/</span></>}<span>{title}</span></nav>{eyebrow&&<span class="eyebrow" style="margin-top:24px">{eyebrow}</span>}<h1>{title}</h1><p>{description}</p></div></section>
+<section class="page-hero"><div class="container"><nav class="breadcrumbs" aria-label="مسار الصفحة"><a href="/">الرئيسية</a><span class="breadcrumb-separator" aria-hidden="true">/</span>{parent&&<><a href={parent.href}>{parent.label}</a><span class="breadcrumb-separator" aria-hidden="true">/</span></>}<span aria-current="page">{title}</span></nav><h1>{title}</h1><p>{description}</p></div></section>
