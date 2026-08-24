@@ -1,13 +1,48 @@
 ---
-import { navigation, site } from '../../data/site';
+import { ArrowUpLeft, Mail } from '@lucide/astro';
+import { footerCompanyLinks, footerLegalLinks, footerServiceLinks, site } from '../../data/site';
 ---
 <footer class="site-footer">
   <div class="container--wide">
-    <div class="footer-grid">
-      <div><a class="brand brand--footer" href="/" aria-label="MGBC — الصفحة الرئيسية"><img src="/brand/mgbc-logo-gold.webp" alt="MG Business Consulting" width="797" height="769" loading="lazy" decoding="async" /></a><p class="footer-title">وضوح مالي وضريبي يدعم القرار.</p><p style="color:var(--text-on-dark-muted);max-width:45ch">نضع الأرقام والمتطلبات والسياق السعودي في صورة تساعد صاحب القرار على تحديد الأولوية والخطوة التالية.</p></div>
-      <nav class="footer-links" aria-label="روابط الموقع">{navigation.map(item => <a href={item.href}>{item.label}</a>)}</nav>
-      <nav class="footer-links" aria-label="روابط قانونية"><a href="/privacy/">سياسة الخصوصية</a><a href="/terms/">الشروط والأحكام</a><a href={site.primaryCta.href}>ابدأ التقييم الأولي</a></nav>
+    <div class="footer-main">
+      <div class="footer-brand">
+        <a class="brand brand--footer" href="/" aria-label="MGBC — الصفحة الرئيسية">
+          <img src="/brand/mgbc-logo-gold.webp" alt="MG Business Consulting" width="797" height="769" loading="lazy" decoding="async" />
+        </a>
+        <p class="footer-kicker">SAUDI FINANCIAL &amp; TAX ADVISORY</p>
+        <h2 class="footer-title">وضوح مالي وضريبي يدعم القرار.</h2>
+        <p class="footer-copy">نضع الأرقام والمتطلبات والسياق السعودي في صورة تساعد صاحب القرار على تحديد الأولوية والخطوة التالية.</p>
+      </div>
+
+      <div class="footer-nav-grid">
+        <nav class="footer-group" aria-label="روابط الشركة">
+          <span class="footer-label">الشركة</span>
+          <div class="footer-links">
+            {footerCompanyLinks.map(item => <a href={item.href}>{item.label}</a>)}
+          </div>
+        </nav>
+        <nav class="footer-group" aria-label="روابط الخدمات">
+          <span class="footer-label">الخدمات</span>
+          <div class="footer-links">
+            {footerServiceLinks.map(item => <a href={item.href}>{item.label}</a>)}
+          </div>
+        </nav>
+      </div>
+
+      <aside class="footer-contact" aria-label="ابدأ مع MGBC">
+        <span class="footer-label">ابدأ من هنا</span>
+        <h3>لديك قرار يحتاج صورة أوضح؟</h3>
+        <p>ابدأ بتقييم أولي قصير، ثم نحدد معًا إن كانت هناك حاجة إلى خطوة استشارية أعمق.</p>
+        <a class="footer-email" href={`mailto:${site.email}`}><Mail size={18} stroke-width={1.6} aria-hidden="true" /><span>{site.email}</span></a>
+        <a class="footer-cta" href={site.primaryCta.href}><span>{site.primaryCta.label}</span><ArrowUpLeft size={19} stroke-width={1.6} aria-hidden="true" /></a>
+      </aside>
     </div>
-    <div class="footer-bottom"><span>© {new Date().getFullYear()} MGBC</span><span>Saudi Financial &amp; Tax Advisory</span></div>
+
+    <div class="footer-bottom">
+      <div class="footer-bottom__brand"><span>© {new Date().getFullYear()} MGBC</span><span>Saudi Financial &amp; Tax Advisory</span></div>
+      <nav class="footer-legal" aria-label="روابط قانونية">
+        {footerLegalLinks.map(item => <a href={item.href}>{item.label}</a>)}
+      </nav>
+    </div>
   </div>
 </footer>
