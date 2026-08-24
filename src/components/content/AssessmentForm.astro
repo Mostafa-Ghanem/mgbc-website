@@ -18,6 +18,19 @@
   <div class="assessment-result" id="assessment-result" role="status" aria-live="polite"></div>
 </form>
 <script>
-  const form=document.querySelector('#assessment-form'); const result=document.querySelector('#assessment-result');
-  form?.addEventListener('submit',(event)=>{ event.preventDefault(); if(!(form instanceof HTMLFormElement)||!(result instanceof HTMLElement)) return; const data=new FormData(form); const review=['reports','cashflow','tax','scenario'].filter(k=>data.get(k)==='review'); const labels={reports:'التقارير الإدارية',cashflow:'وضوح التدفقات النقدية',tax:'الجاهزية الزكوية والضريبية',scenario:'اختبار سيناريوهات القرار'}; const focus=review.length?review.map(k=>labels[k]).join('، '):'الحفاظ على انتظام المراجعة وربط المؤشرات بالقرار'; result.innerHTML=`<strong>نقطة البداية المقترحة للمناقشة:</strong><br>${focus}.<br><small>هذا ملخص توجيهي مبني على إجاباتك، وليس تشخيصًا أو رأيًا مهنيًا نهائيًا.</small><div style="margin-top:1rem"><a class="button button--primary" href="/contact/">ناقش النتيجة مع MGBC</a></div>`; result.dataset.visible='true'; result.scrollIntoView({behavior:'smooth',block:'center'}); });
+  const form=document.querySelector('#assessment-form');
+  const result=document.querySelector('#assessment-result');
+  const readinessKeys=['reports','cashflow','tax','scenario'] as const;
+  type ReadinessKey=(typeof readinessKeys)[number];
+  const labels:Record<ReadinessKey,string>={reports:'التقارير الإدارية',cashflow:'وضوح التدفقات النقدية',tax:'الجاهزية الزكوية والضريبية',scenario:'اختبار سيناريوهات القرار'};
+  form?.addEventListener('submit',(event)=>{
+    event.preventDefault();
+    if(!(form instanceof HTMLFormElement)||!(result instanceof HTMLElement)) return;
+    const data=new FormData(form);
+    const review=readinessKeys.filter((key)=>data.get(key)==='review');
+    const focus=review.length?review.map((key)=>labels[key]).join('، '):'الحفاظ على انتظام المراجعة وربط المؤشرات بالقرار';
+    result.innerHTML=`<strong>نقطة البداية المقترحة للمناقشة:</strong><br>${focus}.<br><small>هذا ملخص توجيهي مبني على إجاباتك، وليس تشخيصًا أو رأيًا مهنيًا نهائيًا.</small><div style="margin-top:1rem"><a class="button button--primary" href="/contact/">ناقش النتيجة مع MGBC</a></div>`;
+    result.dataset.visible='true';
+    result.scrollIntoView({behavior:'smooth',block:'center'});
+  });
 </script>
