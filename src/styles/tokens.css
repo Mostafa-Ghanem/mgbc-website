@@ -8,7 +8,13 @@
   --text-primary:var(--color-ink-950); --text-secondary:var(--color-slate-600); --text-on-dark:var(--color-white); --text-on-dark-muted:#C6D0D9;
   --accent-primary:var(--color-brass-600); --accent-on-dark:var(--color-brass-400); --border-subtle:#DDE1E4; --border-on-dark:rgba(255,255,255,.16); --focus-ring:var(--color-brass-400);
   --font-arabic:'IBM Plex Sans Arabic','Noto Sans Arabic',Tahoma,Arial,sans-serif; --font-latin:'IBM Plex Sans',Inter,system-ui,sans-serif;
-  --section-sm:clamp(72px,7vw,88px); --section-md:clamp(96px,9vw,120px); --section-lg:clamp(120px,11vw,160px);
+  --type-display:clamp(2.65rem,5.2vw,5.25rem); --type-page-title:clamp(2.35rem,4.4vw,4.25rem); --type-section-title:clamp(1.9rem,3vw,3rem);
+  --type-feature-title:clamp(1.45rem,2vw,2rem); --type-card-title:clamp(1.15rem,1.3vw,1.4rem); --type-lead:clamp(1.03rem,calc(.95rem + .35vw),1.2rem);
+  --type-body:1rem; --type-small:.9rem; --type-meta:.8rem; --type-eyebrow:.78rem;
+  --leading-display:1.16; --leading-heading:1.28; --leading-body:1.75; --leading-compact:1.5;
+  --accent-text:#80612F;
+
+  --section-sm:clamp(64px,5.5vw,80px); --section-md:clamp(80px,7vw,104px); --section-lg:clamp(96px,8.5vw,128px);
   --container-reading:760px; --container-content:1184px; --container-wide:1360px; --container-cinematic:1536px;
   --gutter-mobile:20px; --gutter-tablet:32px; --gutter-desktop:48px;
   --radius-sm:8px; --radius-md:12px; --radius-lg:18px; --radius-xl:28px; --radius-button:12px;
