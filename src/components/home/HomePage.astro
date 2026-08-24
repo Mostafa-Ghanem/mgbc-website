@@ -1,0 +1,30 @@
+---
+import '../../styles/home.css';
+import HeroDecision from './HeroDecision.astro';
+import AuthorityStrip from './AuthorityStrip.astro';
+import ProblemOutcomeRail from './ProblemOutcomeRail.astro';
+import ServiceNarrative from './ServiceNarrative.astro';
+import WhyMGBCStatements from './WhyMGBCStatements.astro';
+import SaudiContextScene from './SaudiContextScene.astro';
+import ProofBand from './ProofBand.astro';
+import MethodologySequence from './MethodologySequence.astro';
+import AudienceMatrix from './AudienceMatrix.astro';
+import RegulatoryPanel from './RegulatoryPanel.astro';
+import InsightFeature from './InsightFeature.astro';
+import FAQAccordion from './FAQAccordion.astro';
+import GlobalCTA from '../global/GlobalCTA.astro';
+import home from '../../data/home.json';
+---
+<HeroDecision data={home}/>
+<AuthorityStrip section={home.authority}/>
+<ProblemOutcomeRail section={home.problems}/>
+<ServiceNarrative section={home.services}/>
+<WhyMGBCStatements section={home.why}/>
+<SaudiContextScene section={home.saudi}/>
+<ProofBand section={home.proof}/>
+<MethodologySequence section={home.method}/>
+<AudienceMatrix section={home.audience}/>
+<RegulatoryPanel section={home.regulatory}/>
+<InsightFeature section={home.insights}/>
+<FAQAccordion section={home.faq}/>
+<GlobalCTA title={home.final.title} description={home.final.intro?.[0]}/>

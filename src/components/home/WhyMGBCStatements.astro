@@ -1,0 +1,5 @@
+---
+interface Props { section:any; }
+const { section } = Astro.props;
+---
+<section class="section section--lg section--paper"><div class="container why-grid"><div><span class="eyebrow">منهج التفكير</span><h2 class="h2" style="margin-top:1rem">{section.title}</h2></div><div class="why-statements">{section.items.map((item:any)=><article class="why-statement"><h3>{item.title}</h3>{item.body.map((p:string)=><p>{p}</p>)}</article>)}</div></div></section>

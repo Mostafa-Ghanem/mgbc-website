@@ -1,0 +1,5 @@
+---
+interface Props { section:any; }
+const { section } = Astro.props;
+---
+<section class="authority-strip" aria-label="مؤشرات الثقة"><div class="container--wide authority-grid">{section.bullets.map((text:string,i:number) => { const parts=text.split(' '); const lead=i===0?parts.slice(0,2).join(' '):parts.slice(0,2).join(' '); const rest=parts.slice(2).join(' '); return <div class="authority-item"><strong>{lead}</strong>{rest}</div>; })}</div></section>

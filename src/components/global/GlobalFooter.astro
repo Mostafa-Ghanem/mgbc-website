@@ -1,0 +1,13 @@
+---
+import { navigation, site } from '../../data/site';
+---
+<footer class="site-footer">
+  <div class="container--wide">
+    <div class="footer-grid">
+      <div><a class="brand" href="/"><img src="/logo.webp" alt="MGBC" width="104" height="66" /></a><p class="footer-title">وضوح مالي وضريبي يدعم القرار.</p><p style="color:var(--text-on-dark-muted);max-width:45ch">نضع الأرقام والمتطلبات والسياق السعودي في صورة تساعد صاحب القرار على تحديد الأولوية والخطوة التالية.</p></div>
+      <nav class="footer-links" aria-label="روابط الموقع">{navigation.map(item => <a href={item.href}>{item.label}</a>)}</nav>
+      <nav class="footer-links" aria-label="روابط قانونية"><a href="/privacy/">سياسة الخصوصية</a><a href="/terms/">الشروط والأحكام</a><a href={site.primaryCta.href}>ابدأ التقييم الأولي</a></nav>
+    </div>
+    <div class="footer-bottom"><span>© {new Date().getFullYear()} MGBC</span><span>Saudi Financial &amp; Tax Advisory</span></div>
+  </div>
+</footer>

@@ -1,0 +1,5 @@
+---
+interface Props { section:any; }
+const { section } = Astro.props;
+---
+<section class="saudi-scene"><div class="saudi-scene__geometry" aria-hidden="true"><div class="saudi-scene__light"></div><div class="tower tower--1"></div><div class="tower tower--2"></div><div class="tower tower--3"></div><span class="scene-label">RIYADH / SAUDI CONTEXT</span></div><div class="container--wide"><div class="saudi-scene__content"><span class="eyebrow">السياق السعودي</span><h2 class="h2" style="margin-top:1rem">{section.title}</h2>{section.intro.map((p:string)=><p>{p}</p>)}</div></div></section>

@@ -1,0 +1,6 @@
+---
+interface Props { section:any; }
+const { section } = Astro.props;
+const facts=section.bullets || [];
+---
+<section class="section section--paper"><div class="container proof-band"><div class="proof-number">+7<small>سنوات في السوق السعودي</small></div><div><span class="eyebrow">ما يمكن إثباته ونشره الآن</span><h2 class="h2" style="margin:1rem 0 2rem">{section.title}</h2><div class="proof-facts">{facts.map((fact:string)=><div class="proof-fact">{fact}</div>)}{section.intro.map((p:string)=><p class="proof-note">{p}</p>)}</div></div></div></section>

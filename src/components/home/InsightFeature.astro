@@ -1,0 +1,6 @@
+---
+interface Props { section:any; }
+const { section } = Astro.props;
+const links=['/insights/cash-flow-visibility/','/insights/tax-readiness/','/insights/feasibility-assumptions/'];
+---
+<section class="section section--lg"><div class="container--wide"><div class="section-intro"><span class="eyebrow">Insights</span><h2 class="h2">{section.title}</h2></div><div class="insight-grid"><a class="insight-feature" href={links[0]}><span class="kicker">01 / Financial Insight</span><div><h3>{section.items[0]?.title}</h3><p class="lead">{section.items[0]?.body?.[0]}</p><span class="service-link">اقرأ التحليل</span></div></a><div class="insight-list">{section.items.slice(1).map((item:any,i:number)=><a class="insight-row" href={links[i+1]}><span class="kicker">0{i+2}</span><h3>{item.title}</h3><p>{item.body?.[0]}</p><span class="service-link">اقرأ المزيد</span></a>)}</div></div></div></section>

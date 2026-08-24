@@ -1,0 +1,6 @@
+---
+interface Props { section:any; }
+const { section } = Astro.props;
+const links=['/services/financial-advisory/','/services/tax-zakat-advisory/','/services/feasibility-studies/'];
+---
+<section class="section section--deep"><div class="container--wide"><div class="section-intro"><span class="eyebrow">الخدمات</span><h2 class="h2">{section.title}</h2></div><div class="service-stack">{section.items.map((item:any,i:number)=><article class="service-row"><div class="service-row__number"><span>0{i+1}</span><span>ADVISORY</span></div><div class="service-row__content"><h3>{item.title}</h3><p>{item.body[0]}</p><a class="service-link" href={links[i]}>{item.body[1] || 'تفاصيل الخدمة'}</a></div></article>)}</div></div></section>
