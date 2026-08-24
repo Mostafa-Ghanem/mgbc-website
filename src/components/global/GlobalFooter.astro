@@ -1,6 +1,25 @@
 ---
 import { ArrowUpLeft, Mail } from '@lucide/astro';
-import { footerCompanyLinks, footerLegalLinks, footerServiceLinks, site } from '../../data/site';
+import { site } from '../../data/site';
+
+const footerCompanyLinks = [
+  { label: 'من نحن', href: '/about/' },
+  { label: 'المعرفة', href: '/insights/' },
+  { label: 'تواصل معنا', href: '/contact/' },
+];
+
+const footerServiceLinks = [
+  { label: 'الاستشارات المالية', href: '/services/financial-advisory/' },
+  { label: 'الزكاة والضرائب', href: '/services/tax-zakat-advisory/' },
+  { label: 'دراسات الجدوى', href: '/services/feasibility-studies/' },
+];
+
+const footerLegalLinks = [
+  { label: 'سياسة الخصوصية', href: '/privacy/' },
+  { label: 'الشروط والأحكام', href: '/terms/' },
+];
+
+const contactEmail = 'info@mgbc.sa';
 ---
 <footer class="site-footer">
   <div class="container--wide">
@@ -33,7 +52,7 @@ import { footerCompanyLinks, footerLegalLinks, footerServiceLinks, site } from '
         <span class="footer-label">ابدأ من هنا</span>
         <h3>لديك قرار يحتاج صورة أوضح؟</h3>
         <p>ابدأ بتقييم أولي قصير، ثم نحدد معًا إن كانت هناك حاجة إلى خطوة استشارية أعمق.</p>
-        <a class="footer-email" href={`mailto:${site.email}`}><Mail size={18} stroke-width={1.6} aria-hidden="true" /><span>{site.email}</span></a>
+        <a class="footer-email" href={`mailto:${contactEmail}`}><Mail size={18} stroke-width={1.6} aria-hidden="true" /><span>{contactEmail}</span></a>
         <a class="footer-cta" href={site.primaryCta.href}><span>{site.primaryCta.label}</span><ArrowUpLeft size={19} stroke-width={1.6} aria-hidden="true" /></a>
       </aside>
     </div>
