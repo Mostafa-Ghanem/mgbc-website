@@ -1,0 +1,25 @@
+---
+import { getCollection, render } from 'astro:content';
+import BaseLayout from '../layouts/BaseLayout.astro';
+import PageHero from '../components/content/PageHero.astro';
+import AssessmentForm from '../components/content/AssessmentForm.astro';
+import ContactForm from '../components/content/ContactForm.astro';
+import GlobalCTA from '../components/global/GlobalCTA.astro';
+
+export async function getStaticPaths(){
+  const pages=await getCollection('pages');
+  return pages.filter(entry=>entry.data.pageType!=='home').map(entry=>({ params:{slug:entry.data.slug.replace(/^\//,'').replace(/\/$/,'')}, props:{entry} }));
+}
+const { entry } = Astro.props;
+const { Content } = await render(entry);
+const raw=entry.body ?? '';
+const heroTitle=(raw.match(/^#\s+(.+)$/m)?.[1] || entry.data.primaryTopic).replace(/\*\*/g,'');
+const isLegalDraft=entry.data.status==='DRAFT_READY_FOR_LEGAL_REVIEW';
+const robots=isLegalDraft ? 'noindex,follow' : (entry.data.robots || 'index,follow');
+const eyebrow=entry.data.pageType==='service'?'خدمات MGBC':entry.data.pageType==='insight'?'MGBC Insights':entry.data.pageType==='about'?'عن MGBC':entry.data.pageType==='servicesHub'?'الخدمات':entry.data.pageType==='insightsHub'?'المعرفة':entry.data.pageType==='consultation'?'التقييم الأولي':entry.data.pageType==='contact'?'تواصل معنا':'MGBC';
+---
+<BaseLayout title={entry.data.seoTitle} description={entry.data.metaDescription} canonical={entry.data.canonical} robots={robots} pageType={entry.data.pageType}>
+  <PageHero title={heroTitle} description={entry.data.metaDescription} eyebrow={eyebrow}/>
+  {entry.data.pageType==='consultation' ? <section class="section section--paper"><div class="container--reading"><AssessmentForm/></div></section> : entry.data.pageType==='contact' ? <section class="section section--paper"><div class="container--reading"><ContactForm/></div></section> : <section><div class="container rich-page">{isLegalDraft && <div class="legal-draft"><strong>مسودة تحتاج مراجعة قانونية قبل الإطلاق الإنتاجي.</strong></div>}<Content/></div></section>}
+  {!['legal','consultation'].includes(entry.data.pageType) && <GlobalCTA/>}
+</BaseLayout>

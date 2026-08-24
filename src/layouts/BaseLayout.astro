@@ -1,0 +1,17 @@
+---
+import '../styles/global.css';
+import GlobalHeader from '../components/global/GlobalHeader.astro';
+import GlobalFooter from '../components/global/GlobalFooter.astro';
+import { site } from '../data/site';
+interface Props { title:string; description:string; canonical?:string; robots?:string; pageType?:string; noFooter?:boolean; }
+const { title, description, canonical=site.url + Astro.url.pathname, robots='index,follow', pageType='page', noFooter=false } = Astro.props;
+const jsonLd={ '@context':'https://schema.org', '@type':'Organization', name:'MGBC', url:site.url };
+---
+<!doctype html><html lang="ar" dir="rtl"><head>
+<meta charset="UTF-8"/><meta name="viewport" content="width=device-width, initial-scale=1"/><meta name="robots" content={robots}/>
+<title>{title}</title><meta name="description" content={description}/><link rel="canonical" href={canonical}/>
+<meta property="og:type" content="website"/><meta property="og:locale" content="ar_SA"/><meta property="og:site_name" content="MGBC"/><meta property="og:title" content={title}/><meta property="og:description" content={description}/><meta property="og:url" content={canonical}/>
+<meta name="twitter:card" content="summary"/><meta name="theme-color" content="#03111F"/>
+<link rel="preconnect" href="https://fonts.googleapis.com"/><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="anonymous"/><link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@400;500;600;700&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap" rel="stylesheet"/>
+<script type="application/ld+json" set:html={JSON.stringify(jsonLd)}></script>
+</head><body data-page-type={pageType}><GlobalHeader/><main><slot/></main>{!noFooter && <GlobalFooter/>}</body></html>
