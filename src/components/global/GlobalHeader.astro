@@ -1,14 +1,15 @@
 ---
+import { Menu } from '@lucide/astro';
 import { navigation, site } from '../../data/site';
 ---
 <header class="site-header">
   <div class="container--wide site-header__inner">
-    <a class="brand" href="/" aria-label="MGBC — الصفحة الرئيسية"><img src="/logo.webp" alt="MGBC" width="104" height="66" /></a>
+    <a class="brand brand--header" href="/" aria-label="MGBC — الصفحة الرئيسية"><img src="/brand/mgbc-mark-gold.webp" alt="MGBC" width="797" height="605" decoding="async" fetchpriority="high" /></a>
     <nav class="nav" aria-label="التنقل الرئيسي">{navigation.map(item => <a href={item.href}>{item.label}</a>)}</nav>
     <div class="header-actions">
       <a class="button button--secondary" href={site.secondaryCta.href}>{site.secondaryCta.label}</a>
       <a class="button button--primary" href={site.primaryCta.href}>{site.primaryCta.label}</a>
-      <details class="mobile-nav"><summary aria-label="فتح القائمة">☰</summary><nav class="mobile-nav__panel" aria-label="التنقل على الهاتف">{navigation.map(item => <a href={item.href}>{item.label}</a>)}<a href={site.primaryCta.href}>{site.primaryCta.label}</a></nav></details>
+      <details class="mobile-nav"><summary aria-label="فتح القائمة"><Menu size={20} strokeWidth={1.6} aria-hidden="true" /></summary><nav class="mobile-nav__panel" aria-label="التنقل على الهاتف">{navigation.map(item => <a href={item.href}>{item.label}</a>)}<a href={site.primaryCta.href}>{site.primaryCta.label}</a></nav></details>
     </div>
   </div>
 </header>
