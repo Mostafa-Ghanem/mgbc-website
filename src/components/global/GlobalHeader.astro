@@ -1,15 +1,72 @@
 ---
-import { Menu } from '@lucide/astro';
+import { ArrowUpLeft, Menu, X } from '@lucide/astro';
 import { navigation, site } from '../../data/site';
 ---
 <header class="site-header">
   <div class="container--wide site-header__inner">
-    <a class="brand brand--header" href="/" aria-label="MGBC — الصفحة الرئيسية"><img src="/brand/mgbc-mark-gold.webp" alt="MGBC" width="797" height="605" decoding="async" fetchpriority="high" /></a>
-    <nav class="nav" aria-label="التنقل الرئيسي">{navigation.map(item => <a href={item.href}>{item.label}</a>)}</nav>
+    <a class="brand brand--header" href="/" aria-label="MGBC — الصفحة الرئيسية">
+      <img src="/brand/mgbc-logo-gold.webp" alt="MGBC" width="797" height="769" decoding="async" fetchpriority="high" />
+    </a>
+
+    <nav class="nav" aria-label="التنقل الرئيسي">
+      {navigation.map(item => <a href={item.href}>{item.label}</a>)}
+    </nav>
+
     <div class="header-actions">
       <a class="button button--secondary" href={site.secondaryCta.href}>{site.secondaryCta.label}</a>
       <a class="button button--primary" href={site.primaryCta.href}>{site.primaryCta.label}</a>
-      <details class="mobile-nav"><summary aria-label="فتح القائمة"><Menu size={20} stroke-width={1.6} aria-hidden="true" /></summary><nav class="mobile-nav__panel" aria-label="التنقل على الهاتف">{navigation.map(item => <a href={item.href}>{item.label}</a>)}<a href={site.primaryCta.href}>{site.primaryCta.label}</a></nav></details>
+
+      <details class="mobile-nav" data-mobile-nav>
+        <summary aria-label="فتح القائمة">
+          <Menu class="mobile-nav__icon mobile-nav__icon--menu" size={22} stroke-width={1.6} aria-hidden="true" />
+          <X class="mobile-nav__icon mobile-nav__icon--close" size={22} stroke-width={1.6} aria-hidden="true" />
+        </summary>
+
+        <button class="mobile-nav__backdrop" type="button" aria-label="إغلاق القائمة" data-mobile-nav-close></button>
+
+        <div class="mobile-nav__panel">
+          <div class="mobile-nav__meta">
+            <span>MGBC / ADVISORY</span>
+            <span>التنقل</span>
+          </div>
+
+          <nav class="mobile-nav__links" aria-label="التنقل على الهاتف">
+            {navigation.map((item, index) => (
+              <a class="mobile-nav__link" href={item.href}>
+                <span class="mobile-nav__index">{String(index + 1).padStart(2, '0')}</span>
+                <span>{item.label}</span>
+                <ArrowUpLeft size={18} stroke-width={1.6} aria-hidden="true" />
+              </a>
+            ))}
+          </nav>
+
+          <div class="mobile-nav__cta">
+            <div>
+              <span class="mobile-nav__cta-label">ابدأ من نقطة واضحة</span>
+              <p>تقييم أولي قصير يساعدنا على فهم نقطة البداية.</p>
+            </div>
+            <a class="button button--primary" href={site.primaryCta.href}>{site.primaryCta.label}</a>
+          </div>
+        </div>
+      </details>
     </div>
   </div>
 </header>
+
+<script>
+  document.querySelectorAll('[data-mobile-nav]').forEach((nav) => {
+    if (!(nav instanceof HTMLDetailsElement)) return;
+
+    const close = () => nav.removeAttribute('open');
+    nav.querySelector('[data-mobile-nav-close]')?.addEventListener('click', close);
+    nav.querySelectorAll('a').forEach((link) => link.addEventListener('click', close));
+
+    document.addEventListener('pointerdown', (event) => {
+      if (nav.open && event.target instanceof Node && !nav.contains(event.target)) close();
+    });
+
+    document.addEventListener('keydown', (event) => {
+      if (event.key === 'Escape' && nav.open) close();
+    });
+  });
+</script>
