@@ -1,4 +1,4 @@
-<form class="assessment" id="contact-form">
+<form class="assessment" id="contact-form" method="post" action="/contact/">
   <section class="form-section"><h2>أرسل رسالة</h2><div class="form-grid">
     <div class="field"><label for="c-name">الاسم</label><input id="c-name" name="name" autocomplete="name" required/></div>
     <div class="field"><label for="c-email">البريد الإلكتروني</label><input id="c-email" name="email" type="email" autocomplete="email" required/></div>
@@ -7,7 +7,8 @@
     <div class="field field--full"><label for="c-topic">موضوع الاستشارة</label><select id="c-topic" name="topic"><option>الاستشارات المالية</option><option>الاستشارات الزكوية والضريبية</option><option>دراسات الجدوى</option><option>استفسار عام</option></select></div>
     <div class="field field--full"><label for="c-details">التفاصيل</label><textarea id="c-details" name="details" maxlength="2000" required></textarea></div>
   </div></section>
-  <p class="form-note">في هذه النسخة التحضيرية لا نرسل بيانات النموذج إلى خادم غير معتمد. زر الإرسال يفتح رسالة بريد موجهة إلى البريد المنشور لـMGBC، وسيتم اختبار قناة الاستقبال النهائية في مرحلة QA/Launch.</p>
+  <p class="form-note">في هذه النسخة التحضيرية لا نرسل بيانات النموذج إلى خادم غير معتمد. عند تفعيل JavaScript، يفتح زر الإرسال رسالة بريد موجهة إلى البريد المنشور لـMGBC، وسيتم اختبار قناة الاستقبال النهائية في مرحلة QA/Launch.</p>
+  <noscript><p class="form-note">يتطلب إرسال النموذج تفعيل JavaScript. يمكنك مراسلتنا مباشرة على البريد المنشور.</p></noscript>
   <div class="button-row"><button class="button button--dark" type="submit">إرسال الرسالة</button><a class="button button--secondary" href="mailto:info@mgbc.sa">info@mgbc.sa</a></div>
 </form>
 <script>

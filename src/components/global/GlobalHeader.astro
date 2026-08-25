@@ -17,14 +17,14 @@ import { navigation, site } from '../../data/site';
       <a class="button button--primary" href={site.primaryCta.href}>{site.primaryCta.label}</a>
 
       <details class="mobile-nav" data-mobile-nav>
-        <summary aria-label="فتح القائمة">
+        <summary aria-label="فتح القائمة" aria-controls="mobile-nav-panel" aria-expanded="false">
           <Menu class="mobile-nav__icon mobile-nav__icon--menu" size={22} stroke-width={1.6} aria-hidden="true" />
           <X class="mobile-nav__icon mobile-nav__icon--close" size={22} stroke-width={1.6} aria-hidden="true" />
         </summary>
 
         <button class="mobile-nav__backdrop" type="button" aria-label="إغلاق القائمة" data-mobile-nav-close></button>
 
-        <div class="mobile-nav__panel">
+        <div class="mobile-nav__panel" id="mobile-nav-panel">
           <div class="mobile-nav__meta">
             <span>MGBC / ADVISORY</span>
             <span>التنقل</span>
@@ -57,7 +57,23 @@ import { navigation, site } from '../../data/site';
   document.querySelectorAll('[data-mobile-nav]').forEach((nav) => {
     if (!(nav instanceof HTMLDetailsElement)) return;
 
-    const close = () => nav.removeAttribute('open');
+    const summary = nav.querySelector('summary');
+    const panel = nav.querySelector('.mobile-nav__panel');
+    const mobileQuery = window.matchMedia('(max-width: 960px)');
+    const focusableElements = () => panel ? Array.from(panel.querySelectorAll('a[href],button:not([disabled])')).filter((element): element is HTMLElement => element instanceof HTMLElement && !element.hidden) : [];
+    const syncState = () => {
+      const isOpen = nav.open;
+      document.documentElement.classList.toggle('mobile-nav-open', isOpen);
+      summary?.setAttribute('aria-expanded', String(isOpen));
+      summary?.setAttribute('aria-label', isOpen ? 'إغلاق القائمة' : 'فتح القائمة');
+      if (isOpen) requestAnimationFrame(() => focusableElements()[0]?.focus({ preventScroll: true }));
+    };
+    const close = () => {
+      nav.removeAttribute('open');
+      syncState();
+      if (summary instanceof HTMLElement) summary.focus({ preventScroll: true });
+    };
+    nav.addEventListener('toggle', syncState);
     nav.querySelector('[data-mobile-nav-close]')?.addEventListener('click', close);
     nav.querySelectorAll('a').forEach((link) => link.addEventListener('click', close));
 
@@ -67,6 +83,24 @@ import { navigation, site } from '../../data/site';
 
     document.addEventListener('keydown', (event) => {
       if (event.key === 'Escape' && nav.open) close();
+      if (event.key !== 'Tab' || !nav.open) return;
+      const focusable = focusableElements();
+      const first = focusable[0];
+      const last = focusable[focusable.length - 1];
+      if (!(first instanceof HTMLElement) || !(last instanceof HTMLElement)) return;
+      if (event.shiftKey && document.activeElement === first) {
+        event.preventDefault();
+        last.focus();
+      } else if (!event.shiftKey && document.activeElement === last) {
+        event.preventDefault();
+        first.focus();
+      }
     });
+
+    mobileQuery.addEventListener('change', () => {
+      if (!mobileQuery.matches && nav.open) close();
+    });
+
+    syncState();
   });
 </script>

@@ -1,5 +1,6 @@
 ---
-interface Props { section:any; }
+import type { HomeSection } from '../../data/home-types';
+interface Props { section:HomeSection; }
 const { section } = Astro.props;
 ---
-<section class="section section--lg"><div class="container problem-layout"><div class="problem-sticky"><span class="eyebrow">من المشكلة إلى القرار</span><h2 class="h2" style="margin-top:1rem">{section.title}</h2>{section.intro.map((p:string)=><p class="lead">{p}</p>)}</div><div class="problem-list">{section.items.map((item:any,i:number)=><article class="problem-row"><span class="problem-row__index">0{i+1}</span><div><h3>{item.title}</h3>{item.body.map((p:string)=><p>{p}</p>)}</div></article>)}</div></div></section>
+<section class="section section--lg"><div class="container problem-layout"><div class="problem-sticky"><span class="eyebrow">من المشكلة إلى القرار</span><h2 class="h2 section-heading">{section.title}</h2>{section.intro.map((p:string)=><p class="lead">{p}</p>)}</div><div class="problem-list">{section.items.map((item,i:number)=><article class="problem-row"><span class="problem-row__index">0{i+1}</span><div><h3>{item.title}</h3>{item.body.map((p:string)=><p>{p}</p>)}</div></article>)}</div></div></section>

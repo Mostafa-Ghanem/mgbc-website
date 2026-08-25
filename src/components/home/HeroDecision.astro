@@ -1,7 +1,8 @@
 ---
 import FinancialDecisionVisual from '../visual/FinancialDecisionVisual.astro';
 import { site } from '../../data/site';
-interface Props { data:any; }
+import type { HomeData } from '../../data/home-types';
+interface Props { data:HomeData; }
 const { data } = Astro.props;
 ---
 <section class="home-hero"><div class="container--wide home-hero__grid"><div><span class="eyebrow">استشارات مالية وزكوية وضريبية — السعودية</span><h1 class="display">{data.h1}</h1><p class="home-hero__copy">{data.preamble[0]}</p><div class="button-row"><a class="button button--primary" href={site.primaryCta.href}>{site.primaryCta.label}</a><a class="button button--secondary" href={site.secondaryCta.href}>{site.secondaryCta.label}</a></div><div class="hero-meta">{data.preamble[2]}</div></div><FinancialDecisionVisual/></div></section>

@@ -1,7 +1,8 @@
 ---
 import { BriefcaseBusiness, TrendingUp, Building2, ClipboardList } from '@lucide/astro';
-interface Props { section:any; }
+import type { HomeSection } from '../../data/home-types';
+interface Props { section:HomeSection; }
 const { section } = Astro.props;
 const icons=[BriefcaseBusiness, TrendingUp, Building2, ClipboardList];
 ---
-<section class="section section--lg"><div class="container"><div class="section-intro"><span class="eyebrow">أصحاب القرار</span><h2 class="h2">{section.title}</h2></div><div class="audience-grid">{section.items.map((item:any,i:number)=>{const Icon=icons[i] ?? BriefcaseBusiness;return <article class="audience-item"><div class="audience-item__head"><span class="icon-frame"><Icon size={24} stroke-width={1.6} aria-hidden="true" /></span><h3>{item.title}</h3></div>{item.body.map((p:string)=><p>{p}</p>)}</article>})}</div></div></section>
+<section class="section section--lg"><div class="container"><div class="section-intro"><span class="eyebrow">أصحاب القرار</span><h2 class="h2">{section.title}</h2></div><div class="audience-grid">{section.items.map((item,i:number)=>{const Icon=icons[i] ?? BriefcaseBusiness;return <article class="audience-item"><div class="audience-item__head"><span class="icon-frame"><Icon size={24} stroke-width={1.6} aria-hidden="true" /></span><h3>{item.title}</h3></div>{item.body.map((p:string)=><p>{p}</p>)}</article>})}</div></div></section>

@@ -1,4 +1,4 @@
-<form class="assessment" id="assessment-form">
+<form class="assessment" id="assessment-form" method="post" action="/consultation/">
   <section class="form-section"><h2>البيانات الأساسية</h2><div class="form-grid">
     <div class="field"><label for="a-name">الاسم</label><input id="a-name" name="name" autocomplete="name" required /></div>
     <div class="field"><label for="a-email">البريد الإلكتروني</label><input id="a-email" name="email" type="email" autocomplete="email" required /></div>
@@ -14,6 +14,7 @@
   <section class="form-section"><fieldset><legend>هل قرارات التوسع أو الاستثمار تُختبر من خلال افتراضات وسيناريوهات مالية؟</legend><div class="choice-grid"><label class="choice"><input type="radio" name="scenario" value="yes" required/>نعم.</label><label class="choice"><input type="radio" name="scenario" value="review"/>غالبًا لا / نحتاج إلى تطوير ذلك.</label></div></fieldset></section>
   <div class="field"><label for="a-challenge">ما التحدي الأهم الآن؟</label><textarea id="a-challenge" name="challenge" maxlength="1500" placeholder="صف القرار أو المشكلة بلغتك، دون إدخال مستندات أو معلومات شديدة الحساسية."></textarea></div>
   <p class="form-note">التقييم الإلكتروني نحو 3 دقائق، ولا يمثل رأيًا ماليًا أو زكويًا أو ضريبيًا نهائيًا. لا تضع مستندات سرية أو معلومات شديدة الحساسية هنا.</p>
+  <noscript><p class="form-note">يتطلب عرض الملخص الأولي تفعيل JavaScript. لا ترسل معلومات شديدة الحساسية عبر هذا النموذج.</p></noscript>
   <div class="button-row"><button class="button button--dark" type="submit">اعرض الملخص الأولي</button></div>
   <div class="assessment-result" id="assessment-result" role="status" aria-live="polite"></div>
 </form>
@@ -29,7 +30,7 @@
     const data=new FormData(form);
     const review=readinessKeys.filter((key)=>data.get(key)==='review');
     const focus=review.length?review.map((key)=>labels[key]).join('، '):'الحفاظ على انتظام المراجعة وربط المؤشرات بالقرار';
-    result.innerHTML=`<strong>نقطة البداية المقترحة للمناقشة:</strong><br>${focus}.<br><small>هذا ملخص توجيهي مبني على إجاباتك، وليس تشخيصًا أو رأيًا مهنيًا نهائيًا.</small><div style="margin-top:1rem"><a class="button button--primary" href="/contact/">ناقش النتيجة مع MGBC</a></div>`;
+    result.innerHTML=`<strong>نقطة البداية المقترحة للمناقشة:</strong><br>${focus}.<br><small>هذا ملخص توجيهي مبني على إجاباتك، وليس تشخيصًا أو رأيًا مهنيًا نهائيًا.</small><div class="assessment-result__link"><a class="button button--primary" href="/contact/">ناقش النتيجة مع MGBC</a></div>`;
     result.dataset.visible='true';
     result.scrollIntoView({behavior:'smooth',block:'center'});
   });

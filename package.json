@@ -8,6 +8,8 @@
     "build": "astro check && astro build",
     "preview": "astro preview",
     "check": "astro check",
+    "test:contracts": "node --test tests/build-contract.test.mjs",
+    "test": "npm run build && npm run test:contracts",
     "review:ui:start": "node .agents/skills/ui-review-loop/scripts/round.mjs start",
     "review:ui:run": "node .agents/skills/ui-review-loop/scripts/round.mjs run --",
     "review:ui:stop": "node .agents/skills/ui-review-loop/scripts/round.mjs stop",

@@ -14,17 +14,19 @@ import InsightFeature from './InsightFeature.astro';
 import FAQAccordion from './FAQAccordion.astro';
 import GlobalCTA from '../global/GlobalCTA.astro';
 import home from '../../data/home.json';
+import type { HomeData } from '../../data/home-types';
+const homeData: HomeData = home;
 ---
-<HeroDecision data={home}/>
-<AuthorityStrip section={home.authority}/>
-<ProblemOutcomeRail section={home.problems}/>
-<ServiceNarrative section={home.services}/>
-<WhyMGBCStatements section={home.why}/>
-<SaudiContextScene section={home.saudi}/>
-<ProofBand section={home.proof}/>
-<MethodologySequence section={home.method}/>
-<AudienceMatrix section={home.audience}/>
-<RegulatoryPanel section={home.regulatory}/>
-<InsightFeature section={home.insights}/>
-<FAQAccordion section={home.faq}/>
-<GlobalCTA title={home.final.title} description={home.final.intro?.[0]}/>
+<HeroDecision data={homeData}/>
+<AuthorityStrip section={homeData.authority}/>
+<ProblemOutcomeRail section={homeData.problems}/>
+<ServiceNarrative section={homeData.services}/>
+<WhyMGBCStatements section={homeData.why}/>
+<SaudiContextScene section={homeData.saudi}/>
+<ProofBand section={homeData.proof}/>
+<MethodologySequence section={homeData.method}/>
+<AudienceMatrix section={homeData.audience}/>
+<RegulatoryPanel section={homeData.regulatory}/>
+<InsightFeature section={homeData.insights}/>
+<FAQAccordion section={homeData.faq}/>
+<GlobalCTA title={homeData.final.title} description={homeData.final.intro?.[0]}/>

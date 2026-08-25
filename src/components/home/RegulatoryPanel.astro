@@ -1,5 +1,6 @@
 ---
-interface Props { section:any; }
+import type { HomeSection } from '../../data/home-types';
+interface Props { section:HomeSection; }
 const { section } = Astro.props;
 ---
-<section class="section section--paper"><div class="container"><div class="regulatory"><div class="regulatory__content"><span class="eyebrow">Regulatory Intelligence</span><h2 class="h2" style="margin-top:1rem">{section.title}</h2>{section.intro.map((p:string)=><p>{p}</p>)}</div></div></div></section>
+<section class="section section--paper"><div class="container"><div class="regulatory"><div class="regulatory__content"><span class="eyebrow">Regulatory Intelligence</span><h2 class="h2 section-heading">{section.title}</h2>{section.intro.map((p:string)=><p>{p}</p>)}</div></div></div></section>

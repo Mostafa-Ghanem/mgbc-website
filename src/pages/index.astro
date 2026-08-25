@@ -1,6 +1,9 @@
 ---
+import { getCollection } from 'astro:content';
 import BaseLayout from '../layouts/BaseLayout.astro';
 import HomePage from '../components/home/HomePage.astro';
-import home from '../data/home.json';
+
+const homePage = (await getCollection('pages')).find((entry) => entry.data.pageType === 'home');
+if (!homePage) throw new Error('Missing home-ar content entry');
 ---
-<BaseLayout title={home.frontmatter.seoTitle} description={home.frontmatter.metaDescription} canonical={home.frontmatter.canonical} pageType="home"><HomePage/></BaseLayout>
+<BaseLayout title={homePage.data.seoTitle} description={homePage.data.metaDescription} canonical={homePage.data.canonical} pageType="home"><HomePage/></BaseLayout>
