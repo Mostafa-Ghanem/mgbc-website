@@ -80,6 +80,30 @@ test('form pages retain authored supporting content and safe POST fallbacks', ()
   }
 });
 
+
+test('lead forms use the shared backend pipeline and preserve assessment identity', () => {
+  const contactSource = readFileSync(join(root, 'src/components/content/ContactForm.astro'), 'utf8');
+  const assessmentSource = readFileSync(join(root, 'src/components/content/AssessmentForm.astro'), 'utf8');
+  const leadCaptureSource = readFileSync(join(root, 'src/lib/leadCapture.ts'), 'utf8');
+  const attributionSource = readFileSync(join(root, 'src/lib/leadAttribution.ts'), 'utf8');
+  const layoutSource = readFileSync(join(root, 'src/layouts/BaseLayout.astro'), 'utf8');
+
+  assert.doesNotMatch(contactSource, /window\.location\.href\s*=\s*`mailto:/);
+  assert.match(contactSource, /submitLead\(payload\)/);
+  assert.match(assessmentSource, /submitLead\(payload\)/);
+  assert.match(contactSource, /assessment_submission_id/);
+  assert.match(assessmentSource, /saveAssessmentIdentity/);
+  assert.match(contactSource, /name="website_confirm"/);
+  assert.match(assessmentSource, /name="website_confirm"/);
+  assert.match(leadCaptureSource, /PUBLIC_MGBC_LEAD_ENDPOINT/);
+  assert.match(leadCaptureSource, /text\/plain;charset=UTF-8/);
+  assert.match(attributionSource, /landing_page/);
+  assert.match(attributionSource, /gclid/);
+  assert.match(attributionSource, /fbclid/);
+  assert.match(attributionSource, /msclkid/);
+  assert.match(layoutSource, /captureInitialAttribution/);
+});
+
 test('internal links resolve to generated files', () => {
   const htmlFiles = contentRoutes.map((route) =>
     route === '/' ? join(dist, 'index.html') : join(dist, route.slice(1), 'index.html'),

@@ -7,6 +7,7 @@
     <div class="field"><label for="a-site">الموقع الإلكتروني <span class="muted">— اختياري</span></label><input id="a-site" name="website" type="url" inputmode="url" /></div>
     <div class="field"><label for="a-team">حجم الفريق</label><select id="a-team" name="team"><option>1–5</option><option>6–20</option><option>21–50</option><option>أكثر من 50</option></select></div>
     <div class="field field--full"><label for="a-service">الخدمة الأقرب للاحتياج</label><select id="a-service" name="service"><option>الاستشارات المالية</option><option>الاستشارات الزكوية والضريبية</option><option>دراسات الجدوى</option><option>غير متأكد وأحتاج إلى تشخيص</option></select></div>
+    <div class="form-honeypot" aria-hidden="true"><label for="a-website-confirm">اترك هذا الحقل فارغًا</label><input id="a-website-confirm" name="website_confirm" type="text" tabindex="-1" autocomplete="off"/></div>
   </div></section>
   <section class="form-section"><h2>أسئلة الجاهزية</h2><fieldset><legend>هل توجد تقارير مالية دورية تساعد الإدارة على اتخاذ القرار؟</legend><div class="choice-grid"><label class="choice"><input type="radio" name="reports" value="yes" required/>نعم، بانتظام.</label><label class="choice"><input type="radio" name="reports" value="review"/>لا، أو بصورة غير منتظمة.</label></div></fieldset></section>
   <section class="form-section"><fieldset><legend>هل التدفقات النقدية المتوقعة للفترة القادمة واضحة للإدارة؟</legend><div class="choice-grid"><label class="choice"><input type="radio" name="cashflow" value="yes" required/>نعم.</label><label class="choice"><input type="radio" name="cashflow" value="review"/>لا / غير متأكد.</label></div></fieldset></section>
@@ -14,24 +15,99 @@
   <section class="form-section"><fieldset><legend>هل قرارات التوسع أو الاستثمار تُختبر من خلال افتراضات وسيناريوهات مالية؟</legend><div class="choice-grid"><label class="choice"><input type="radio" name="scenario" value="yes" required/>نعم.</label><label class="choice"><input type="radio" name="scenario" value="review"/>غالبًا لا / نحتاج إلى تطوير ذلك.</label></div></fieldset></section>
   <div class="field"><label for="a-challenge">ما التحدي الأهم الآن؟</label><textarea id="a-challenge" name="challenge" maxlength="1500" placeholder="صف القرار أو المشكلة بلغتك، دون إدخال مستندات أو معلومات شديدة الحساسية."></textarea></div>
   <p class="form-note">التقييم الإلكتروني نحو 3 دقائق، ولا يمثل رأيًا ماليًا أو زكويًا أو ضريبيًا نهائيًا. لا تضع مستندات سرية أو معلومات شديدة الحساسية هنا.</p>
-  <noscript><p class="form-note">يتطلب عرض الملخص الأولي تفعيل JavaScript. لا ترسل معلومات شديدة الحساسية عبر هذا النموذج.</p></noscript>
-  <div class="button-row"><button class="button button--dark" type="submit">اعرض الملخص الأولي</button></div>
+  <noscript><p class="form-note">يتطلب حفظ التقييم وعرض الملخص الأولي تفعيل JavaScript. لا ترسل معلومات شديدة الحساسية عبر هذا النموذج.</p></noscript>
+  <div class="button-row"><button class="button button--dark" type="submit" data-submit-button>اعرض الملخص الأولي</button></div>
+  <div class="form-status" id="assessment-status" role="status" aria-live="polite"></div>
   <div class="assessment-result" id="assessment-result" role="status" aria-live="polite"></div>
 </form>
 <script>
-  const form=document.querySelector('#assessment-form');
-  const result=document.querySelector('#assessment-result');
-  const readinessKeys=['reports','cashflow','tax','scenario'] as const;
-  type ReadinessKey=(typeof readinessKeys)[number];
-  const labels:Record<ReadinessKey,string>={reports:'التقارير الإدارية',cashflow:'وضوح التدفقات النقدية',tax:'الجاهزية الزكوية والضريبية',scenario:'اختبار سيناريوهات القرار'};
-  form?.addEventListener('submit',(event)=>{
-    event.preventDefault();
-    if(!(form instanceof HTMLFormElement)||!(result instanceof HTMLElement)) return;
-    const data=new FormData(form);
-    const review=readinessKeys.filter((key)=>data.get(key)==='review');
-    const focus=review.length?review.map((key)=>labels[key]).join('، '):'الحفاظ على انتظام المراجعة وربط المؤشرات بالقرار';
-    result.innerHTML=`<strong>نقطة البداية المقترحة للمناقشة:</strong><br>${focus}.<br><small>هذا ملخص توجيهي مبني على إجاباتك، وليس تشخيصًا أو رأيًا مهنيًا نهائيًا.</small><div class="assessment-result__link"><a class="button button--primary" href="/contact/">ناقش النتيجة مع MGBC</a></div>`;
-    result.dataset.visible='true';
-    result.scrollIntoView({behavior:'smooth',block:'center'});
-  });
+  import {
+    LeadCaptureError,
+    buildLeadPayload,
+    clearPendingSubmissionId,
+    getOrCreateSubmissionId,
+    saveAssessmentIdentity,
+    submitLead,
+  } from '../../lib/leadCapture';
+
+  const form = document.querySelector('#assessment-form');
+  const result = document.querySelector('#assessment-result');
+  const status = document.querySelector('#assessment-status');
+  const button = form?.querySelector('[data-submit-button]');
+  const readinessKeys = ['reports', 'cashflow', 'tax', 'scenario'] as const;
+  type ReadinessKey = (typeof readinessKeys)[number];
+  const labels: Record<ReadinessKey, string> = {
+    reports: 'التقارير الإدارية',
+    cashflow: 'وضوح التدفقات النقدية',
+    tax: 'الجاهزية الزكوية والضريبية',
+    scenario: 'اختبار سيناريوهات القرار',
+  };
+
+  if (
+    form instanceof HTMLFormElement &&
+    result instanceof HTMLElement &&
+    status instanceof HTMLElement &&
+    button instanceof HTMLButtonElement
+  ) {
+    form.addEventListener('submit', async (event) => {
+      event.preventDefault();
+      if (!form.reportValidity()) return;
+
+      const data = new FormData(form);
+      const review = readinessKeys.filter((key) => data.get(key) === 'review');
+      const focus = review.length
+        ? review.map((key) => labels[key]).join('، ')
+        : 'الحفاظ على انتظام المراجعة وربط المؤشرات بالقرار';
+      const submissionId = getOrCreateSubmissionId(form);
+      const originalLabel = button.textContent || 'اعرض الملخص الأولي';
+
+      status.dataset.state = 'loading';
+      status.textContent = 'جارٍ حفظ إجاباتك وإعداد الملخص…';
+      result.dataset.visible = 'false';
+      result.replaceChildren();
+      form.setAttribute('aria-busy', 'true');
+      button.disabled = true;
+      button.textContent = 'جارٍ الحفظ…';
+
+      try {
+        const payload = buildLeadPayload('assessment', data, {
+          submission_id: submissionId,
+          readiness_focus: focus,
+          readiness_review_count: review.length,
+        });
+        const response = await submitLead(payload);
+        const savedSubmissionId = response.submission_id || submissionId;
+
+        saveAssessmentIdentity({
+          submission_id: savedSubmissionId,
+          name: String(data.get('name') || ''),
+          email: String(data.get('email') || ''),
+          phone: String(data.get('phone') || ''),
+          company: String(data.get('company') || ''),
+          website: String(data.get('website') || ''),
+        });
+        clearPendingSubmissionId(form);
+        form.removeAttribute('aria-busy');
+
+        status.dataset.state = 'success';
+        status.textContent = 'تم حفظ التقييم بنجاح.';
+        result.innerHTML = `<strong>نقطة البداية المقترحة للمناقشة:</strong><br>${focus}.<br><small>هذا ملخص توجيهي مبني على إجاباتك، وليس تشخيصًا أو رأيًا مهنيًا نهائيًا.</small><div class="assessment-result__link"><a class="button button--primary" href="/contact/">ناقش النتيجة مع MGBC</a></div>`;
+        result.dataset.visible = 'true';
+        result.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        button.textContent = 'تم حفظ التقييم';
+      } catch (error) {
+        status.dataset.state = 'error';
+        if (error instanceof LeadCaptureError && error.code === 'offline') {
+          status.textContent = 'لا يوجد اتصال بالإنترنت حاليًا. تحقق من الاتصال ثم أعد المحاولة؛ ستظل إجاباتك في النموذج.';
+        } else if (error instanceof LeadCaptureError && error.code === 'timeout') {
+          status.textContent = 'تعذر تأكيد حفظ التقييم في الوقت المحدد. أعد المحاولة؛ سيُعاد استخدام رقم الطلب نفسه لتجنب التكرار.';
+        } else {
+          status.textContent = 'تعذر حفظ التقييم الآن. لم نعرض النتيجة على أنها محفوظة؛ أعد المحاولة عند توفر الاتصال.';
+        }
+        form.removeAttribute('aria-busy');
+        button.disabled = false;
+        button.textContent = originalLabel;
+      }
+    });
+  }
 </script>

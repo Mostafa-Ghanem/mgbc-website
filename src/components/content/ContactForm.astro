@@ -6,12 +6,77 @@
     <div class="field"><label for="c-company">الشركة أو المشروع <span class="muted">— اختياري</span></label><input id="c-company" name="company"/></div>
     <div class="field field--full"><label for="c-topic">موضوع الاستشارة</label><select id="c-topic" name="topic"><option>الاستشارات المالية</option><option>الاستشارات الزكوية والضريبية</option><option>دراسات الجدوى</option><option>استفسار عام</option></select></div>
     <div class="field field--full"><label for="c-details">التفاصيل</label><textarea id="c-details" name="details" maxlength="2000" required></textarea></div>
+    <div class="form-honeypot" aria-hidden="true"><label for="c-website-confirm">اترك هذا الحقل فارغًا</label><input id="c-website-confirm" name="website_confirm" type="text" tabindex="-1" autocomplete="off"/></div>
   </div></section>
-  <p class="form-note">في هذه النسخة التحضيرية لا نرسل بيانات النموذج إلى خادم غير معتمد. عند تفعيل JavaScript، يفتح زر الإرسال رسالة بريد موجهة إلى البريد المنشور لـMGBC، وسيتم اختبار قناة الاستقبال النهائية في مرحلة QA/Launch.</p>
+  <p class="form-note">تُستخدم البيانات التي ترسلها لمراجعة طلبك والتواصل معك بشأنه. لا ترسل مستندات أو معلومات شديدة الحساسية عبر النموذج.</p>
   <noscript><p class="form-note">يتطلب إرسال النموذج تفعيل JavaScript. يمكنك مراسلتنا مباشرة على البريد المنشور.</p></noscript>
-  <div class="button-row"><button class="button button--dark" type="submit">إرسال الرسالة</button><a class="button button--secondary" href="mailto:info@mgbc.sa">info@mgbc.sa</a></div>
+  <p class="form-prefill-note" id="contact-prefill-note" hidden>تم تعبئة بياناتك الأساسية من التقييم السابق، ويمكنك تعديلها قبل الإرسال.</p>
+  <div class="button-row"><button class="button button--dark" type="submit" data-submit-button>إرسال الرسالة</button><a class="button button--secondary" href="mailto:info@mgbc.sa">info@mgbc.sa</a></div>
+  <div class="form-status" id="contact-status" role="status" aria-live="polite"></div>
 </form>
 <script>
-  const form=document.querySelector('#contact-form');
-  form?.addEventListener('submit',(event)=>{ event.preventDefault(); if(!(form instanceof HTMLFormElement)) return; const d=new FormData(form); const subject=encodeURIComponent(`MGBC — ${d.get('topic')||'استفسار'}`); const body=encodeURIComponent(`الاسم: ${d.get('name')||''}\nالبريد: ${d.get('email')||''}\nالجوال: ${d.get('phone')||''}\nالشركة: ${d.get('company')||''}\n\nالتفاصيل:\n${d.get('details')||''}`); window.location.href=`mailto:info@mgbc.sa?subject=${subject}&body=${body}`; });
+  import {
+    LeadCaptureError,
+    buildLeadPayload,
+    clearPendingSubmissionId,
+    getAssessmentIdentity,
+    getOrCreateSubmissionId,
+    prefillContactIdentity,
+    submitLead,
+  } from '../../lib/leadCapture';
+
+  const form = document.querySelector('#contact-form');
+  const status = document.querySelector('#contact-status');
+  const prefillNote = document.querySelector('#contact-prefill-note');
+  const button = form?.querySelector('[data-submit-button]');
+
+  if (
+    form instanceof HTMLFormElement &&
+    status instanceof HTMLElement &&
+    button instanceof HTMLButtonElement
+  ) {
+    const prefilled = prefillContactIdentity(form);
+    if (prefilled && prefillNote instanceof HTMLElement) prefillNote.hidden = false;
+
+    form.addEventListener('submit', async (event) => {
+      event.preventDefault();
+      if (!form.reportValidity()) return;
+
+      const originalLabel = button.textContent || 'إرسال الرسالة';
+      const submissionId = getOrCreateSubmissionId(form);
+      const assessmentIdentity = getAssessmentIdentity();
+      const extra: Record<string, string> = { submission_id: submissionId };
+      if (assessmentIdentity?.submission_id) {
+        extra.assessment_submission_id = assessmentIdentity.submission_id;
+      }
+
+      status.dataset.state = 'loading';
+      status.textContent = 'جارٍ إرسال طلبك…';
+      form.setAttribute('aria-busy', 'true');
+      button.disabled = true;
+      button.textContent = 'جارٍ الإرسال…';
+
+      try {
+        const payload = buildLeadPayload('contact', new FormData(form), extra);
+        await submitLead(payload);
+        clearPendingSubmissionId(form);
+        form.removeAttribute('aria-busy');
+        status.dataset.state = 'success';
+        status.textContent = 'تم استلام رسالتك بنجاح. سيتواصل معك فريق MGBC عبر بيانات التواصل التي أدخلتها.';
+        button.textContent = 'تم الإرسال';
+      } catch (error) {
+        status.dataset.state = 'error';
+        if (error instanceof LeadCaptureError && error.code === 'offline') {
+          status.textContent = 'لا يوجد اتصال بالإنترنت حاليًا. تحقق من الاتصال ثم أعد المحاولة؛ لن تحتاج إلى إعادة كتابة البيانات.';
+        } else if (error instanceof LeadCaptureError && error.code === 'timeout') {
+          status.textContent = 'تعذر تأكيد الإرسال في الوقت المحدد. أعد المحاولة؛ سيُعاد استخدام رقم الطلب نفسه لتجنب التكرار.';
+        } else {
+          status.textContent = 'تعذر إرسال الرسالة الآن. أعد المحاولة أو استخدم البريد الإلكتروني الظاهر كخيار بديل.';
+        }
+        form.removeAttribute('aria-busy');
+        button.disabled = false;
+        button.textContent = originalLabel;
+      }
+    });
+  }
 </script>
