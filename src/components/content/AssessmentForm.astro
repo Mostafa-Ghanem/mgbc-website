@@ -1,26 +1,95 @@
-<form class="assessment" id="assessment-form" method="post" action="/consultation/">
-  <section class="form-section"><h2>البيانات الأساسية</h2><div class="form-grid">
-    <div class="field"><label for="a-name">الاسم</label><input id="a-name" name="name" autocomplete="name" required /></div>
-    <div class="field"><label for="a-email">البريد الإلكتروني</label><input id="a-email" name="email" type="email" autocomplete="email" required /></div>
-    <div class="field"><label for="a-phone">رقم الجوال <span class="muted">— اختياري</span></label><input id="a-phone" name="phone" type="tel" autocomplete="tel" /></div>
-    <div class="field"><label for="a-company">اسم الشركة أو المشروع</label><input id="a-company" name="company" required /></div>
-    <div class="field"><label for="a-site">الموقع الإلكتروني <span class="muted">— اختياري</span></label><input id="a-site" name="website" type="url" inputmode="url" /></div>
-    <div class="field"><label for="a-team">حجم الفريق</label><select id="a-team" name="team"><option>1–5</option><option>6–20</option><option>21–50</option><option>أكثر من 50</option></select></div>
-    <div class="field field--full"><label for="a-service">الخدمة الأقرب للاحتياج</label><select id="a-service" name="service"><option>الاستشارات المالية</option><option>الاستشارات الزكوية والضريبية</option><option>دراسات الجدوى</option><option>غير متأكد وأحتاج إلى تشخيص</option></select></div>
-    <div class="form-honeypot" aria-hidden="true"><label for="a-website-confirm">اترك هذا الحقل فارغًا</label><input id="a-website-confirm" name="website_confirm" type="text" tabindex="-1" autocomplete="off"/></div>
-  </div></section>
-  <section class="form-section"><h2>أسئلة الجاهزية</h2><fieldset><legend>هل توجد تقارير مالية دورية تساعد الإدارة على اتخاذ القرار؟</legend><div class="choice-grid"><label class="choice"><input type="radio" name="reports" value="yes" required/>نعم، بانتظام.</label><label class="choice"><input type="radio" name="reports" value="review"/>لا، أو بصورة غير منتظمة.</label></div></fieldset></section>
-  <section class="form-section"><fieldset><legend>هل التدفقات النقدية المتوقعة للفترة القادمة واضحة للإدارة؟</legend><div class="choice-grid"><label class="choice"><input type="radio" name="cashflow" value="yes" required/>نعم.</label><label class="choice"><input type="radio" name="cashflow" value="review"/>لا / غير متأكد.</label></div></fieldset></section>
-  <section class="form-section"><fieldset><legend>هل الوضع الزكوي والضريبي موثق وتتم مراجعته قبل الاستحقاقات أو الإجراءات المهمة؟</legend><div class="choice-grid"><label class="choice"><input type="radio" name="tax" value="yes" required/>نعم.</label><label class="choice"><input type="radio" name="tax" value="review"/>لا / توجد نقاط تحتاج إلى مراجعة.</label></div></fieldset></section>
-  <section class="form-section"><fieldset><legend>هل قرارات التوسع أو الاستثمار تُختبر من خلال افتراضات وسيناريوهات مالية؟</legend><div class="choice-grid"><label class="choice"><input type="radio" name="scenario" value="yes" required/>نعم.</label><label class="choice"><input type="radio" name="scenario" value="review"/>غالبًا لا / نحتاج إلى تطوير ذلك.</label></div></fieldset></section>
-  <div class="field"><label for="a-challenge">ما التحدي الأهم الآن؟</label><textarea id="a-challenge" name="challenge" maxlength="1500" placeholder="صف القرار أو المشكلة بلغتك، دون إدخال مستندات أو معلومات شديدة الحساسية."></textarea></div>
-  <p class="form-note">التقييم الإلكتروني نحو 3 دقائق، ولا يمثل رأيًا ماليًا أو زكويًا أو ضريبيًا نهائيًا. لا تضع مستندات سرية أو معلومات شديدة الحساسية هنا.</p>
-  <noscript><p class="form-note">يتطلب حفظ التقييم وعرض الملخص الأولي تفعيل JavaScript. لا ترسل معلومات شديدة الحساسية عبر هذا النموذج.</p></noscript>
-  <div class="button-row"><button class="button button--dark" type="submit" data-submit-button>اعرض الملخص الأولي</button></div>
-  <div class="form-status" id="assessment-status" role="status" aria-live="polite"></div>
-  <div class="assessment-result" id="assessment-result" role="status" aria-live="polite"></div>
+---
+import '../../styles/assessment.css';
+import { dimensions, profileQuestions, questions } from '../../data/assessment';
+
+const stepLabels = ['المنشأة', ...dimensions.map((d) => d.title), 'النتيجة'];
+const totalQuestionSteps = dimensions.length + 1;
+---
+<form class="diagnostic" id="assessment-form" method="post" action="/consultation/" novalidate data-step="0">
+  <div class="diagnostic__progress" aria-hidden="true">
+    {stepLabels.map((label, i) => <span class="diagnostic__segment" data-segment={i}><span>{label}</span></span>)}
+  </div>
+  <p class="diagnostic__count" id="diagnostic-count" aria-live="polite">الخطوة 1 من {totalQuestionSteps}</p>
+
+  <section class="diagnostic__step" data-panel="0" aria-labelledby="step-0-title">
+    <header class="diagnostic__head">
+      <span class="diagnostic__kicker">قبل البدء</span>
+      <h2 id="step-0-title" tabindex="-1">عن المنشأة</h2>
+      <p>ثلاثة أسئلة عامة تساعد على ترتيب الأولويات حسب وضعكم. لا نطلب أي أرقام مالية.</p>
+    </header>
+    {profileQuestions.map((pq) => (
+      <fieldset class="diagnostic__q">
+        <legend>{pq.prompt}</legend>
+        <div class="diagnostic__chips">
+          {pq.options.map((o) => (
+            <label class="diagnostic__chip"><input type="radio" name={pq.id} value={o.value} required /><span>{o.label}</span></label>
+          ))}
+        </div>
+      </fieldset>
+    ))}
+    <div class="diagnostic__nav"><button class="button button--dark" type="button" data-next>ابدأ الأسئلة</button></div>
+  </section>
+
+  {dimensions.map((d, di) => (
+    <section class="diagnostic__step" data-panel={di + 1} aria-labelledby={`step-${di + 1}-title`}>
+      <header class="diagnostic__head">
+        <span class="diagnostic__kicker">المحور {di + 1} من {dimensions.length}</span>
+        <h2 id={`step-${di + 1}-title`} tabindex="-1">{d.title}</h2>
+        <p>{d.summary} اختر الوصف الأقرب لما يحدث فعلًا، لا لما هو مخطط له.</p>
+      </header>
+      {questions.filter((q) => q.dimension === d.key).map((q) => (
+        <fieldset class="diagnostic__q">
+          <legend>{q.prompt}</legend>
+          <div class="diagnostic__scale">
+            {q.options.map((label, value) => (
+              <label class="diagnostic__option"><input type="radio" name={q.id} value={value} required /><span>{label}</span></label>
+            ))}
+          </div>
+        </fieldset>
+      ))}
+      <div class="diagnostic__nav">
+        <button class="button button--secondary" type="button" data-prev>السابق</button>
+        <button class="button button--dark" type="button" data-next>{di === dimensions.length - 1 ? 'اعرض النتيجة' : 'التالي'}</button>
+      </div>
+    </section>
+  ))}
+
+  <section class="diagnostic__step diagnostic__result" data-panel={totalQuestionSteps} aria-labelledby="result-title">
+    <header class="diagnostic__head">
+      <span class="diagnostic__kicker">النتيجة الأولية</span>
+      <h2 id="result-title" tabindex="-1">صورة جاهزية المنشأة</h2>
+      <p>ظهرت النتيجة على جهازك فقط، ولم يُرسل أي شيء إلى MGBC. هذا ملخص توجيهي مبني على إجاباتك، وليس رأيًا ماليًا أو زكويًا أو ضريبيًا نهائيًا.</p>
+    </header>
+    <div class="diagnostic__report" data-report></div>
+    <div class="diagnostic__actions">
+      <button class="button button--secondary" type="button" data-print>حفظ النتيجة PDF</button>
+      <a class="button button--secondary" data-whatsapp href="#" target="_blank" rel="noopener">ناقش النتيجة عبر واتساب</a>
+      <button class="diagnostic__restart" type="button" data-restart>إعادة التقييم</button>
+    </div>
+
+    <fieldset class="diagnostic__lead">
+      <legend>اطلب جلسة مناقشة للنتيجة</legend>
+      <p>جلسة أولية تصل إلى 30 دقيقة لقراءة النتيجة مع فريق MGBC وتحديد الخطوة المناسبة. نحتاج فقط إلى وسيلة للتواصل معك.</p>
+      <div class="form-grid">
+        <div class="field"><label for="a-name">الاسم</label><input id="a-name" name="name" autocomplete="name" required /></div>
+        <div class="field"><label for="a-phone">رقم الجوال أو واتساب</label><input id="a-phone" name="phone" type="tel" autocomplete="tel" inputmode="tel" dir="ltr" required /></div>
+        <div class="field"><label for="a-email">البريد الإلكتروني <span class="muted">— اختياري</span></label><input id="a-email" name="email" type="email" autocomplete="email" dir="ltr" /></div>
+        <div class="field"><label for="a-company">اسم المنشأة <span class="muted">— اختياري</span></label><input id="a-company" name="company" autocomplete="organization" /></div>
+        <div class="form-honeypot" aria-hidden="true"><label for="a-website-confirm">اترك هذا الحقل فارغًا</label><input id="a-website-confirm" name="website_confirm" type="text" tabindex="-1" autocomplete="off" /></div>
+      </div>
+      <p class="form-note">يُرسل مع طلبك مستوى كل محور وإجاباتك الاختيارية فقط، دون أي أرقام أو مستندات.</p>
+      <div class="button-row"><button class="button button--primary" type="submit" data-submit-button>اطلب جلسة المناقشة</button></div>
+      <div class="form-status" id="assessment-status" role="status" aria-live="polite"></div>
+    </fieldset>
+  </section>
+
+  <noscript><p class="form-note">يتطلب عرض النتيجة تفعيل JavaScript. يمكنك التواصل مباشرة عبر صفحة <a href="/contact/">تواصل معنا</a>.</p></noscript>
 </form>
+
 <script>
+  import { dimensions, maturityLevels } from '../../data/assessment';
+  import { scoreAssessment, type Answers, type AssessmentResult } from '../../lib/assessment';
+  import { site } from '../../data/site';
   import {
     LeadCaptureError,
     buildLeadPayload,
@@ -30,84 +99,194 @@
     submitLead,
   } from '../../lib/leadCapture';
 
-  const form = document.querySelector('#assessment-form');
-  const result = document.querySelector('#assessment-result');
-  const status = document.querySelector('#assessment-status');
-  const button = form?.querySelector('[data-submit-button]');
-  const readinessKeys = ['reports', 'cashflow', 'tax', 'scenario'] as const;
-  type ReadinessKey = (typeof readinessKeys)[number];
-  const labels: Record<ReadinessKey, string> = {
-    reports: 'التقارير الإدارية',
-    cashflow: 'وضوح التدفقات النقدية',
-    tax: 'الجاهزية الزكوية والضريبية',
-    scenario: 'اختبار سيناريوهات القرار',
-  };
+  const form = document.querySelector<HTMLFormElement>('#assessment-form');
 
-  if (
-    form instanceof HTMLFormElement &&
-    result instanceof HTMLElement &&
-    status instanceof HTMLElement &&
-    button instanceof HTMLButtonElement
-  ) {
+  function el<K extends keyof HTMLElementTagNameMap>(tag: K, cls?: string, text?: string): HTMLElementTagNameMap[K] {
+    const node = document.createElement(tag);
+    if (cls) node.className = cls;
+    if (text) node.textContent = text;
+    return node;
+  }
+
+  if (form) {
+    const panels = Array.from(form.querySelectorAll<HTMLElement>('[data-panel]'));
+    const segments = Array.from(form.querySelectorAll<HTMLElement>('[data-segment]'));
+    const count = form.querySelector<HTMLElement>('#diagnostic-count')!;
+    const report = form.querySelector<HTMLElement>('[data-report]')!;
+    const whatsapp = form.querySelector<HTMLAnchorElement>('[data-whatsapp]')!;
+    const status = form.querySelector<HTMLElement>('#assessment-status')!;
+    const submit = form.querySelector<HTMLButtonElement>('[data-submit-button]')!;
+    const lastQuestionStep = panels.length - 2;
+    let current = 0;
+    let result: AssessmentResult | null = null;
+
+    form.classList.add('is-enhanced');
+
+    const show = (index: number, focus = true) => {
+      current = index;
+      form.dataset.step = String(index);
+      panels.forEach((p, i) => { p.hidden = i !== index; });
+      segments.forEach((s, i) => { s.dataset.state = i < index ? 'done' : i === index ? 'current' : 'todo'; });
+      count.textContent = index > lastQuestionStep ? 'النتيجة' : `الخطوة ${index + 1} من ${lastQuestionStep + 1}`;
+      if (focus) {
+        form.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        panels[index].querySelector<HTMLElement>('h2')?.focus({ preventScroll: true });
+      }
+    };
+
+    const stepComplete = (panel: HTMLElement) => {
+      const groups = Array.from(panel.querySelectorAll<HTMLFieldSetElement>('.diagnostic__q'));
+      const missing = groups.find((g) => !g.querySelector('input:checked'));
+      groups.forEach((g) => g.toggleAttribute('data-missing', g === missing));
+      if (missing) {
+        missing.querySelector<HTMLInputElement>('input')?.focus();
+        missing.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        return false;
+      }
+      return true;
+    };
+
+    const renderResult = (r: AssessmentResult) => {
+      report.replaceChildren();
+
+      const summary = el('div', 'diagnostic__summary');
+      summary.append(
+        el('p', '', `أقوى محور لديكم: ${r.strongest.title} (${r.strongest.label}).`),
+        el('p', '', `المحور الأحق بالاهتمام أولًا: ${r.weakest.title} (${r.weakest.label}).`),
+      );
+
+      const bars = el('ul', 'diagnostic__levels');
+      r.dimensions.forEach((d) => {
+        const li = el('li');
+        const meter = el('span', 'diagnostic__meter');
+        meter.setAttribute('role', 'img');
+        meter.setAttribute('aria-label', `المستوى ${d.level + 1} من ${maturityLevels.length}: ${d.label}`);
+        maturityLevels.forEach((_, i) => meter.append(el('span', i <= d.level ? 'is-on' : '')));
+        li.append(el('span', 'diagnostic__levelname', d.title), meter, el('strong', `diagnostic__leveltag level-${d.level}`, d.label));
+        bars.append(li);
+      });
+
+      const prioritiesWrap = el('div', 'diagnostic__priorities');
+      prioritiesWrap.append(el('h3', '', r.priorities.length ? 'أهم ثلاث أولويات' : 'ممارسات ناضجة'));
+      if (r.priorities.length) {
+        const list = el('ol');
+        r.priorities.forEach((p) => {
+          const item = el('li');
+          const dim = dimensions.find((d) => d.key === p.dimension)!;
+          item.append(
+            el('span', 'diagnostic__tag', dim.title),
+            el('h4', '', p.title),
+            el('p', '', p.why),
+            el('p', 'diagnostic__step-hint', `خطوة يمكن البدء بها هذا الأسبوع: ${p.firstStep}`),
+          );
+          list.append(item);
+        });
+        prioritiesWrap.append(list);
+      } else {
+        prioritiesWrap.append(el('p', '', 'لم تظهر فجوات جوهرية في إجاباتك. القيمة التالية عادة تكون في اختبار القرارات الكبيرة القادمة بسيناريوهات مستقلة.'));
+      }
+
+      const next = el('p', 'diagnostic__service');
+      const link = el('a', '', r.service.label);
+      link.href = r.service.href;
+      next.append('الخدمة الأقرب لنتيجتك: ', link);
+
+      report.append(summary, bars, prioritiesWrap, next);
+
+      const lines = [
+        'مرحبًا MGBC، أكملت تقييم الجاهزية على الموقع:',
+        ...r.dimensions.map((d) => `• ${d.title}: ${d.label}`),
+        r.priorities[0] ? `أبرز أولوية: ${r.priorities[0].title}` : '',
+        'أرغب في مناقشة النتيجة.',
+      ].filter(Boolean);
+      whatsapp.href = `${site.contact.whatsappHref}?text=${encodeURIComponent(lines.join('\n'))}`;
+    };
+
+    const compute = () => {
+      const data = new FormData(form);
+      const answers: Answers = {};
+      for (const [k, v] of data.entries()) if (/^q\d+$/.test(k)) answers[k] = Number(v);
+      return scoreAssessment(answers, {
+        stage: String(data.get('stage') || ''),
+        team: String(data.get('team') || ''),
+        vat: String(data.get('vat') || ''),
+      });
+    };
+
+    form.addEventListener('change', (e) => {
+      const fs = (e.target as HTMLElement).closest('.diagnostic__q');
+      fs?.removeAttribute('data-missing');
+    });
+
+    form.addEventListener('click', (e) => {
+      const target = (e.target as HTMLElement).closest('button');
+      if (!target) return;
+      if (target.hasAttribute('data-next')) {
+        if (!stepComplete(panels[current])) return;
+        if (current === lastQuestionStep) { result = compute(); renderResult(result); }
+        show(current + 1);
+      } else if (target.hasAttribute('data-prev')) {
+        show(Math.max(0, current - 1));
+      } else if (target.hasAttribute('data-print')) {
+        window.print();
+      } else if (target.hasAttribute('data-restart')) {
+        form.reset();
+        result = null;
+        status.textContent = '';
+        show(0);
+      }
+    });
+
     form.addEventListener('submit', async (event) => {
       event.preventDefault();
-      if (!form.reportValidity()) return;
+      if (!result || current <= lastQuestionStep) return;
+      const lead = form.querySelector<HTMLFieldSetElement>('.diagnostic__lead')!;
+      const invalid = Array.from(lead.querySelectorAll<HTMLInputElement>('input:not([tabindex="-1"])')).find((i) => !i.checkValidity());
+      if (invalid) { invalid.reportValidity(); return; }
 
       const data = new FormData(form);
-      const review = readinessKeys.filter((key) => data.get(key) === 'review');
-      const focus = review.length
-        ? review.map((key) => labels[key]).join('، ')
-        : 'الحفاظ على انتظام المراجعة وربط المؤشرات بالقرار';
       const submissionId = getOrCreateSubmissionId(form);
-      const originalLabel = button.textContent || 'اعرض الملخص الأولي';
-
+      const original = submit.textContent || '';
       status.dataset.state = 'loading';
-      status.textContent = 'جارٍ حفظ إجاباتك وإعداد الملخص…';
-      result.dataset.visible = 'false';
-      result.replaceChildren();
+      status.textContent = 'جارٍ إرسال الطلب…';
       form.setAttribute('aria-busy', 'true');
-      button.disabled = true;
-      button.textContent = 'جارٍ الحفظ…';
+      submit.disabled = true;
 
       try {
         const payload = buildLeadPayload('assessment', data, {
           submission_id: submissionId,
-          readiness_focus: focus,
-          readiness_review_count: review.length,
+          readiness_focus: result.weakest.title,
+          readiness_levels: result.dimensions.map((d) => `${d.key}:${d.level}`).join('|'),
+          readiness_priorities: result.priorities.map((p) => p.questionId).join(','),
+          readiness_review_count: result.priorities.length,
         });
         const response = await submitLead(payload);
-        const savedSubmissionId = response.submission_id || submissionId;
-
         saveAssessmentIdentity({
-          submission_id: savedSubmissionId,
+          submission_id: response.submission_id || submissionId,
           name: String(data.get('name') || ''),
           email: String(data.get('email') || ''),
           phone: String(data.get('phone') || ''),
           company: String(data.get('company') || ''),
-          website: String(data.get('website') || ''),
+          website: '',
         });
         clearPendingSubmissionId(form);
-        form.removeAttribute('aria-busy');
-
         status.dataset.state = 'success';
-        status.textContent = 'تم حفظ التقييم بنجاح.';
-        result.innerHTML = `<strong>نقطة البداية المقترحة للمناقشة:</strong><br>${focus}.<br><small>هذا ملخص توجيهي مبني على إجاباتك، وليس تشخيصًا أو رأيًا مهنيًا نهائيًا.</small><div class="assessment-result__link"><a class="button button--primary" href="/contact/">ناقش النتيجة مع MGBC</a></div>`;
-        result.dataset.visible = 'true';
-        result.scrollIntoView({ behavior: 'smooth', block: 'center' });
-        button.textContent = 'تم حفظ التقييم';
+        status.textContent = 'تم استلام طلبك. سيتواصل معك فريق MGBC لتحديد موعد الجلسة.';
+        submit.textContent = 'تم إرسال الطلب';
       } catch (error) {
         status.dataset.state = 'error';
         if (error instanceof LeadCaptureError && error.code === 'offline') {
-          status.textContent = 'لا يوجد اتصال بالإنترنت حاليًا. تحقق من الاتصال ثم أعد المحاولة؛ ستظل إجاباتك في النموذج.';
-        } else if (error instanceof LeadCaptureError && error.code === 'timeout') {
-          status.textContent = 'تعذر تأكيد حفظ التقييم في الوقت المحدد. أعد المحاولة؛ سيُعاد استخدام رقم الطلب نفسه لتجنب التكرار.';
+          status.textContent = 'لا يوجد اتصال بالإنترنت حاليًا. تحقق من الاتصال ثم أعد المحاولة؛ ستبقى نتيجتك كما هي.';
         } else {
-          status.textContent = 'تعذر حفظ التقييم الآن. لم نعرض النتيجة على أنها محفوظة؛ أعد المحاولة عند توفر الاتصال.';
+          status.textContent = 'تعذر إرسال الطلب الآن. أعد المحاولة، أو تواصل معنا مباشرة عبر واتساب.';
         }
+        submit.disabled = false;
+        submit.textContent = original;
+      } finally {
         form.removeAttribute('aria-busy');
-        button.disabled = false;
-        button.textContent = originalLabel;
       }
     });
+
+    show(0, false);
   }
 </script>

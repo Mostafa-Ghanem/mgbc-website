@@ -14,7 +14,7 @@
   --leading-display:1.16; --leading-heading:1.28; --leading-body:1.75; --leading-compact:1.5;
   --accent-text:#80612F;
 
-  --section-sm:clamp(64px,5.5vw,80px); --section-md:clamp(80px,7vw,104px); --section-lg:clamp(96px,8.5vw,128px);
+  --section-md:clamp(64px,7.5vw,112px); --section-lg:clamp(80px,9vw,136px);
   --container-reading:760px; --container-content:1184px; --container-wide:1360px; --container-cinematic:1536px;
   --gutter-mobile:20px; --gutter-tablet:32px; --gutter-desktop:48px;
   --radius-sm:8px; --radius-md:12px; --radius-lg:18px; --radius-xl:28px; --radius-button:12px;

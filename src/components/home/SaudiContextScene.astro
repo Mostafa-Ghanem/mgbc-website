@@ -1,6 +1,23 @@
 ---
 import type { HomeSection } from '../../data/home-types';
-interface Props { section:HomeSection; }
-const { section } = Astro.props;
+interface Props { saudi:HomeSection; proof:HomeSection; regulatory:HomeSection; }
+const { saudi, proof, regulatory } = Astro.props;
 ---
-<section class="saudi-scene"><div class="saudi-scene__geometry" aria-hidden="true"><div class="saudi-scene__light"></div><div class="tower tower--1"></div><div class="tower tower--2"></div><div class="tower tower--3"></div><span class="scene-label">RIYADH / SAUDI CONTEXT</span></div><div class="container--wide"><div class="saudi-scene__content"><span class="eyebrow">السياق السعودي</span><h2 class="h2 section-heading">{section.title}</h2>{section.intro.map((p:string)=><p>{p}</p>)}</div></div></section>
+<section class="section section--deep pattern-grid pattern-grid--dark saudi-context">
+  <div class="container--wide saudi-context__grid">
+    <div class="saudi-context__proof">
+      <p class="saudi-context__number" aria-label="أكثر من 7 سنوات"><span aria-hidden="true">+7</span></p>
+      <p class="saudi-context__caption">سنوات في السوق السعودي</p>
+      {proof.intro.map((p:string)=><p class="saudi-context__note">{p}</p>)}
+    </div>
+    <div class="saudi-context__body">
+      <span class="eyebrow">السياق السعودي</span>
+      <h2 class="h2 section-heading">{saudi.title}</h2>
+      {saudi.intro.map((p:string)=><p class="lead">{p}</p>)}
+      <div class="saudi-context__regulatory">
+        <h3>{regulatory.title}</h3>
+        {regulatory.intro.map((p:string)=><p>{p}</p>)}
+      </div>
+    </div>
+  </div>
+</section>

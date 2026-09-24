@@ -1,0 +1,23 @@
+---
+import { ArrowUpLeft } from '@lucide/astro';
+import { dimensions } from '../../data/assessment';
+import { site } from '../../data/site';
+---
+<section class="section section--paper">
+  <div class="container diagnostic-teaser">
+    <div class="diagnostic-teaser__copy">
+      <span class="eyebrow">التقييم الأولي</span>
+      <h2 class="h2 section-heading">أين تقف منشأتك اليوم؟</h2>
+      <p class="lead">اثنا عشر سؤالًا عن الممارسات الفعلية داخل المنشأة، تعطيك مستوى النضج في أربعة محاور وأهم ثلاث أولويات مع خطوة عملية لكل منها.</p>
+      <div class="button-row">
+        <a class="button button--dark" href={site.primaryCta.href}>{site.primaryCta.label}</a>
+      </div>
+      <p class="diagnostic-teaser__meta">نحو 4 دقائق · دون أي أرقام مالية · النتيجة فورية على جهازك</p>
+    </div>
+    <ol class="diagnostic-teaser__dims">
+      {dimensions.map((d, i) => (
+        <li><a href={site.primaryCta.href}><span class="diagnostic-teaser__num">0{i + 1}</span><span><strong>{d.title}</strong><span>{d.summary}</span></span><ArrowUpLeft size={18} stroke-width={1.6} aria-hidden="true" /></a></li>
+      ))}
+    </ol>
+  </div>
+</section>
