@@ -7,6 +7,13 @@ export const site = {
   direction: 'rtl' as const,
   positioning: 'Saudi Financial & Tax Advisory Firm',
   primaryCta: { label: 'ابدأ التقييم الأولي', href: '/consultation/' },
+  contact: {
+    email: 'contact@mgbc.sa',
+    whatsapp: '+966598001600',
+    whatsappDisplay: '+966 59 800 1600',
+    whatsappHref: 'https://wa.me/966598001600',
+    unifiedNumber: '7053828732',
+  },
   secondaryCta: { label: 'استكشف خدماتنا', href: '/services/' },
 };
 

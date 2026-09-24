@@ -1,3 +1,6 @@
+---
+import { site } from '../../data/site';
+---
 <form class="assessment" id="contact-form" method="post" action="/contact/">
   <section class="form-section"><h2>أرسل رسالة</h2><div class="form-grid">
     <div class="field"><label for="c-name">الاسم</label><input id="c-name" name="name" autocomplete="name" required/></div>
@@ -11,7 +14,7 @@
   <p class="form-note">تُستخدم البيانات التي ترسلها لمراجعة طلبك والتواصل معك بشأنه. لا ترسل مستندات أو معلومات شديدة الحساسية عبر النموذج.</p>
   <noscript><p class="form-note">يتطلب إرسال النموذج تفعيل JavaScript. يمكنك مراسلتنا مباشرة على البريد المنشور.</p></noscript>
   <p class="form-prefill-note" id="contact-prefill-note" hidden>تم تعبئة بياناتك الأساسية من التقييم السابق، ويمكنك تعديلها قبل الإرسال.</p>
-  <div class="button-row"><button class="button button--dark" type="submit" data-submit-button>إرسال الرسالة</button><a class="button button--secondary" href="mailto:info@mgbc.sa">info@mgbc.sa</a></div>
+  <div class="button-row"><button class="button button--dark" type="submit" data-submit-button>إرسال الرسالة</button><a class="button button--secondary" href={site.contact.whatsappHref} target="_blank" rel="noopener">تواصل عبر واتساب</a><a class="button button--secondary" href={`mailto:${site.contact.email}`}>{site.contact.email}</a></div>
   <div class="form-status" id="contact-status" role="status" aria-live="polite"></div>
 </form>
 <script>

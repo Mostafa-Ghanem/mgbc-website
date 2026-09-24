@@ -10,7 +10,7 @@ const websiteId=`${site.url}#website`;
 const imageUrl=`${site.url}/brand/mgbc-logo-gold.webp`;
 const pageId=`${canonical}#page`;
 const pageTypeSchema=pageType==='about'?'AboutPage':pageType==='contact'?'ContactPage':pageType==='servicesHub'||pageType==='insightsHub'?'CollectionPage':'WebPage';
-const organization={ '@type':'Organization', '@id':organizationId, name:site.name, url:site.url, logo:{ '@type':'ImageObject', url:imageUrl } };
+const organization={ '@type':'Organization', '@id':organizationId, name:site.name, url:site.url, logo:{ '@type':'ImageObject', url:imageUrl }, email:site.contact.email, telephone:site.contact.whatsapp, contactPoint:{ '@type':'ContactPoint', contactType:'customer service', email:site.contact.email, telephone:site.contact.whatsapp, areaServed:'SA', availableLanguage:['ar','en'] } };
 const website={ '@type':'WebSite', '@id':websiteId, name:site.name, url:site.url, inLanguage:site.locale };
 function buildPageEntity(){
   const baseEntity={ '@id':pageId, name:title, description, url:canonical, inLanguage:site.locale, isPartOf:{ '@id':websiteId } };

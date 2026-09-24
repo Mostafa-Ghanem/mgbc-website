@@ -57,4 +57,4 @@ legalReview: true
 
 للاستفسارات المتعلقة بالموقع أو هذه الشروط:
 
-**info@mgbc.sa**
+**contact@mgbc.sa**

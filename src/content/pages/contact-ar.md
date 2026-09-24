@@ -20,7 +20,7 @@ legalReview: false
 
 يمكنك أيضًا مراسلتنا على:
 
-**info@mgbc.sa**
+**contact@mgbc.sa**
 
 
 ## غير متأكد من الخدمة؟

@@ -1,5 +1,5 @@
 ---
-import { ArrowUpLeft, Mail } from '@lucide/astro';
+import { ArrowUpLeft, Mail, MessageCircle } from '@lucide/astro';
 import { site } from '../../data/site';
 
 const footerCompanyLinks = [
@@ -19,7 +19,7 @@ const footerLegalLinks = [
   { label: 'الشروط والأحكام', href: '/terms/' },
 ];
 
-const contactEmail = 'info@mgbc.sa';
+const { email: contactEmail, whatsappHref, whatsappDisplay, unifiedNumber } = site.contact;
 ---
 <footer class="site-footer">
   <div class="container--wide">
@@ -53,12 +53,13 @@ const contactEmail = 'info@mgbc.sa';
         <h3>لديك قرار يحتاج صورة أوضح؟</h3>
         <p>ابدأ بتقييم أولي قصير، ثم نحدد معًا إن كانت هناك حاجة إلى خطوة استشارية أعمق.</p>
         <a class="footer-email" href={`mailto:${contactEmail}`}><Mail size={18} stroke-width={1.6} aria-hidden="true" /><span>{contactEmail}</span></a>
+        <a class="footer-email" href={whatsappHref} target="_blank" rel="noopener" aria-label={`واتساب ${whatsappDisplay}`}><MessageCircle size={18} stroke-width={1.6} aria-hidden="true" /><span>{whatsappDisplay}</span></a>
         <a class="footer-cta" href={site.primaryCta.href}><span>{site.primaryCta.label}</span><ArrowUpLeft size={19} stroke-width={1.6} aria-hidden="true" /></a>
       </aside>
     </div>
 
     <div class="footer-bottom">
-      <div class="footer-bottom__brand"><span>© {new Date().getFullYear()} MGBC</span><span>Saudi Financial &amp; Tax Advisory</span></div>
+      <div class="footer-bottom__brand"><span>© {new Date().getFullYear()} MGBC</span><span>Saudi Financial &amp; Tax Advisory</span><span>الرقم الموحد للمنشأة: <bdi>{unifiedNumber}</bdi></span></div>
       <nav class="footer-legal" aria-label="روابط قانونية">
         {footerLegalLinks.map(item => <a href={item.href}>{item.label}</a>)}
       </nav>
