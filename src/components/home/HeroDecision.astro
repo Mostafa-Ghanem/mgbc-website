@@ -16,7 +16,7 @@ const stage = profileQuestions.find((q) => q.id === 'stage')!;
 <section class:list={['home-hero', { 'home-hero--photo': photo }]}>
   {photo && (
     <div class="home-hero__media" aria-hidden="true">
-      <Image src={photo} alt="" widths={[800, 1280, 1920]} sizes="(max-width: 960px) 100vw, 60vw" format="webp" quality={72} loading="eager" fetchpriority="high" />
+      <Image src={photo} alt="" widths={[640, 1024, 1440, 1920]} sizes="100vw" format="webp" quality={50} loading="eager" fetchpriority="high" />
     </div>
   )}
   <div class="container--wide home-hero__grid">
