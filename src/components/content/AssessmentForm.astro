@@ -122,6 +122,11 @@ const totalQuestionSteps = dimensions.length + 1;
 
     form.classList.add('is-enhanced');
 
+    // Entry from the homepage hero preview (/consultation/?stage=…) keeps the visitor's first answer.
+    const presetStage = new URLSearchParams(window.location.search).get('stage');
+    const presetInput = presetStage ? form.querySelector<HTMLInputElement>(`input[name="stage"][value="${CSS.escape(presetStage)}"]`) : null;
+    if (presetInput) presetInput.checked = true;
+
     const show = (index: number, focus = true) => {
       current = index;
       form.dataset.step = String(index);
@@ -288,5 +293,12 @@ const totalQuestionSteps = dimensions.length + 1;
     });
 
     show(0, false);
+    if (presetInput) {
+      // Wait for the browser's own #hash scroll so focus and position are not overridden.
+      window.addEventListener('load', () => {
+        form.scrollIntoView({ block: 'start' });
+        form.querySelector<HTMLInputElement>('input[name="team"]')?.focus({ preventScroll: true });
+      }, { once: true });
+    }
   }
 </script>

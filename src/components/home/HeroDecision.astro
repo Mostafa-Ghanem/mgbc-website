@@ -1,8 +1,48 @@
 ---
-import FinancialDecisionVisual from '../visual/FinancialDecisionVisual.astro';
+import { Image } from 'astro:assets';
+import type { ImageMetadata } from 'astro';
+import { ArrowUpLeft } from '@lucide/astro';
 import { site } from '../../data/site';
+import { profileQuestions, questions } from '../../data/assessment';
 import type { HomeData } from '../../data/home-types';
 interface Props { data:HomeData; }
 const { data } = Astro.props;
+
+// Drop a licensed Riyadh skyline photo at src/assets/hero/riyadh-skyline.(jpg|webp) to enable the photographic layer.
+const photos = import.meta.glob<{ default: ImageMetadata }>('../../assets/hero/riyadh-skyline.{jpg,jpeg,webp,png}', { eager: true });
+const photo = Object.values(photos)[0]?.default;
+const stage = profileQuestions.find((q) => q.id === 'stage')!;
 ---
-<section class="home-hero"><div class="container--wide home-hero__grid"><div><span class="eyebrow">استشارات مالية وزكوية وضريبية — السعودية</span><h1 class="display">{data.h1}</h1><p class="home-hero__copy">{data.preamble[0]}</p><div class="button-row"><a class="button button--primary" href={site.primaryCta.href}>{site.primaryCta.label}</a><a class="button button--secondary" href={site.secondaryCta.href}>{site.secondaryCta.label}</a></div><div class="hero-meta">{data.preamble[2]}</div></div><FinancialDecisionVisual/></div></section>
+<section class:list={['home-hero', { 'home-hero--photo': photo }]}>
+  {photo && (
+    <div class="home-hero__media" aria-hidden="true">
+      <Image src={photo} alt="" widths={[800, 1280, 1920]} sizes="(max-width: 960px) 100vw, 60vw" format="webp" quality={72} loading="eager" fetchpriority="high" />
+    </div>
+  )}
+  <div class="container--wide home-hero__grid">
+    <div class="home-hero__copy-block">
+      <span class="eyebrow">استشارات مالية وزكوية وضريبية — السعودية</span>
+      <h1 class="display">{data.h1}</h1>
+      <p class="home-hero__copy">{data.preamble[0]}</p>
+      <div class="button-row">
+        <a class="button button--primary" href={site.primaryCta.href}>{site.primaryCta.label}</a>
+        <a class="button button--secondary" href={site.secondaryCta.href}>{site.secondaryCta.label}</a>
+      </div>
+    </div>
+
+    <aside class="hero-assess" aria-labelledby="hero-assess-title">
+      <div class="hero-assess__head">
+        <span>التقييم الأولي</span>
+        <span>{questions.length} سؤالًا · نحو 4 دقائق</span>
+      </div>
+      <h2 id="hero-assess-title">{stage.prompt}</h2>
+      <p class="hero-assess__hint">اختر إجابتك وأكمل التقييم من حيث توقفت.</p>
+      <ul class="hero-assess__options">
+        {stage.options.map((o) => (
+          <li><a href={`${site.primaryCta.href}?stage=${o.value}#assessment-form`}><span>{o.label}</span><ArrowUpLeft size={18} stroke-width={1.6} aria-hidden="true" /></a></li>
+        ))}
+      </ul>
+      <p class="hero-assess__meta">{data.preamble[2]}</p>
+    </aside>
+  </div>
+</section>
