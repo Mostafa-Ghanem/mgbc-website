@@ -1,11 +1,11 @@
 ---
-import { ArrowUpLeft, Menu, X } from '@lucide/astro';
+import { ArrowUpLeft, Mail, Menu, MessageCircle, X } from '@lucide/astro';
 import { navigation, site } from '../../data/site';
 
 const path = Astro.url.pathname;
 const isCurrent = (href: string) => href === '/' ? path === '/' : path.startsWith(href);
 ---
-<header class="site-header">
+<header class="site-header" data-site-header>
   <div class="container--wide site-header__inner">
     <a class="brand brand--header" href="/" aria-label="MGBC — الصفحة الرئيسية">
       <img src="/brand/mgbc-logo-gold.webp" alt="MGBC" width="797" height="769" decoding="async" fetchpriority="high" />
@@ -16,6 +16,7 @@ const isCurrent = (href: string) => href === '/' ? path === '/' : path.startsWit
     </nav>
 
     <div class="header-actions">
+      <a class="header-whatsapp" href={site.contact.whatsappHref} target="_blank" rel="noopener" aria-label="تواصل عبر واتساب"><MessageCircle size={20} stroke-width={1.6} aria-hidden="true" /><span>واتساب</span></a>
       <a class="button button--primary" href={site.primaryCta.href}>{site.primaryCta.label}</a>
 
       <details class="mobile-nav" data-mobile-nav>
@@ -49,6 +50,11 @@ const isCurrent = (href: string) => href === '/' ? path === '/' : path.startsWit
             </div>
             <a class="button button--primary" href={site.primaryCta.href}>{site.primaryCta.label}</a>
           </div>
+
+          <div class="mobile-nav__contact">
+            <a href={site.contact.whatsappHref} target="_blank" rel="noopener"><MessageCircle size={18} stroke-width={1.6} aria-hidden="true" /><span dir="ltr">{site.contact.whatsappDisplay}</span></a>
+            <a href={`mailto:${site.contact.email}`}><Mail size={18} stroke-width={1.6} aria-hidden="true" /><span dir="ltr">{site.contact.email}</span></a>
+          </div>
         </div>
       </details>
     </div>
@@ -56,6 +62,13 @@ const isCurrent = (href: string) => href === '/' ? path === '/' : path.startsWit
 </header>
 
 <script>
+  const header = document.querySelector<HTMLElement>('[data-site-header]');
+  if (header) {
+    const onScroll = () => header.toggleAttribute('data-scrolled', window.scrollY > 8);
+    window.addEventListener('scroll', onScroll, { passive: true });
+    onScroll();
+  }
+
   document.querySelectorAll('[data-mobile-nav]').forEach((nav) => {
     if (!(nav instanceof HTMLDetailsElement)) return;
 

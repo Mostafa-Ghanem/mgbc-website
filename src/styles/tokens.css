@@ -10,7 +10,7 @@
   --font-arabic:'IBM Plex Sans Arabic','Noto Sans Arabic',Tahoma,Arial,sans-serif; --font-latin:'IBM Plex Sans',Inter,system-ui,sans-serif;
   --type-display:clamp(2.4rem,4.2vw,4.55rem); --type-page-title:clamp(2.15rem,3.7vw,3.6rem); --type-section-title:clamp(1.75rem,2.5vw,2.6rem);
   --type-feature-title:clamp(1.3rem,1.6vw,1.75rem); --type-card-title:clamp(1.15rem,1.3vw,1.4rem); --type-lead:clamp(1.03rem,calc(.95rem + .35vw),1.2rem);
-  --type-body:1rem; --type-small:.9rem; --type-meta:.8rem; --type-eyebrow:.78rem;
+  --type-body:1rem; --type-small:.9rem; --type-meta:.8rem; --type-eyebrow:.78rem;--type-label:.72rem;--type-numeral:clamp(4.5rem,9vw,8rem);--weight-regular:400;--weight-strong:600;
   --leading-display:1.16; --leading-heading:1.28; --leading-body:1.75; --leading-compact:1.5;
   --accent-text:#80612F;
 
