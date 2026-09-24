@@ -1,0 +1,6 @@
+---
+import type { HomeSection } from '../../data/home-types';
+interface Props { section:HomeSection; }
+const { section } = Astro.props;
+---
+<section class="section"><div class="container"><div class="section-intro"><span class="eyebrow">منهج التفكير</span><h2 class="h2">{section.title}</h2></div><div class="why-statements">{section.items.map((item,i:number)=><article class="why-statement"><span class="kicker">0{i+1}</span><h3>{item.title}</h3>{item.body.map((p:string)=><p>{p}</p>)}</article>)}</div></div></section>

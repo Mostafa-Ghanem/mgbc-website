@@ -1,0 +1,7 @@
+---
+import type { HomeSection } from '../../data/home-types';
+import { site } from '../../data/site';
+interface Props { section:HomeSection; }
+const { section } = Astro.props;
+---
+<section class="section section--paper"><div class="container faq-layout"><div class="faq-layout__intro"><span class="eyebrow">أسئلة شائعة</span><h2 class="h2 section-heading">{section.title}</h2><p class="lead">لم تجد إجابتك؟ راسلنا مباشرة وسنرد عليك.</p><a class="service-link" href={site.contact.whatsappHref} target="_blank" rel="noopener">تواصل عبر واتساب</a></div><div class="faq-list">{section.items.map((item)=><details><summary>{item.title}</summary>{item.body.map((p:string)=><p>{p}</p>)}</details>)}</div></div></section>

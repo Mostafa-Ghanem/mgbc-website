@@ -1,0 +1,30 @@
+---
+import '../../styles/home.css';
+import HeroDecision from './HeroDecision.astro';
+import AuthorityStrip from './AuthorityStrip.astro';
+import ProblemOutcomeRail from './ProblemOutcomeRail.astro';
+import DiagnosticTeaser from './DiagnosticTeaser.astro';
+import ServiceNarrative from './ServiceNarrative.astro';
+import WhyMGBCStatements from './WhyMGBCStatements.astro';
+import SaudiContextScene from './SaudiContextScene.astro';
+import AudienceMatrix from './AudienceMatrix.astro';
+import MethodologySequence from './MethodologySequence.astro';
+import InsightFeature from './InsightFeature.astro';
+import FAQAccordion from './FAQAccordion.astro';
+import GlobalCTA from '../global/GlobalCTA.astro';
+import home from '../../data/home.json';
+import type { HomeData } from '../../data/home-types';
+const homeData: HomeData = home;
+---
+<HeroDecision data={homeData}/>
+<AuthorityStrip section={homeData.authority}/>
+<ProblemOutcomeRail section={homeData.problems}/>
+<DiagnosticTeaser/>
+<ServiceNarrative section={homeData.services}/>
+<WhyMGBCStatements section={homeData.why}/>
+<SaudiContextScene saudi={homeData.saudi} proof={homeData.proof} regulatory={homeData.regulatory}/>
+<AudienceMatrix section={homeData.audience}/>
+<MethodologySequence section={homeData.method}/>
+<InsightFeature section={homeData.insights}/>
+<FAQAccordion section={homeData.faq}/>
+<GlobalCTA title={homeData.final.title} description={homeData.final.intro?.[0]}/>

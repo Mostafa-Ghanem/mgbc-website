@@ -1,0 +1,9 @@
+---
+import { TrendingUp, ClipboardList, Building2 } from '@lucide/astro';
+import type { HomeSection } from '../../data/home-types';
+interface Props { section:HomeSection; }
+const { section } = Astro.props;
+const links=['/services/financial-advisory/','/services/tax-zakat-advisory/','/services/feasibility-studies/'];
+const icons=[TrendingUp, ClipboardList, Building2];
+---
+<section class="section section--deep pattern-grid pattern-grid--dark"><div class="container--wide"><div class="section-intro"><span class="eyebrow">الخدمات</span><h2 class="h2">{section.title}</h2></div><div class="service-stack">{section.items.map((item,i:number)=>{const Icon=icons[i] ?? ClipboardList;return <article class="service-row"><span class="service-row__number">0{i+1}</span><div class="service-row__title"><span class="icon-frame icon-frame--dark"><Icon size={24} stroke-width={1.6} aria-hidden="true" /></span><h3>{item.title}</h3></div><p>{item.body[0]}</p><a class="service-link" href={links[i]}>{item.body[1] || 'تفاصيل الخدمة'}</a></article>})}</div></div></section>

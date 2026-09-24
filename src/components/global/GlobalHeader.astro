@@ -1,0 +1,108 @@
+---
+import { ArrowUpLeft, Menu, X } from '@lucide/astro';
+import { navigation, site } from '../../data/site';
+
+const path = Astro.url.pathname;
+const isCurrent = (href: string) => href === '/' ? path === '/' : path.startsWith(href);
+---
+<header class="site-header">
+  <div class="container--wide site-header__inner">
+    <a class="brand brand--header" href="/" aria-label="MGBC — الصفحة الرئيسية">
+      <img src="/brand/mgbc-logo-gold.webp" alt="MGBC" width="797" height="769" decoding="async" fetchpriority="high" />
+    </a>
+
+    <nav class="nav" aria-label="التنقل الرئيسي">
+      {navigation.map(item => <a href={item.href} aria-current={isCurrent(item.href) ? 'page' : undefined}>{item.label}</a>)}
+    </nav>
+
+    <div class="header-actions">
+      <a class="button button--primary" href={site.primaryCta.href}>{site.primaryCta.label}</a>
+
+      <details class="mobile-nav" data-mobile-nav>
+        <summary aria-label="فتح القائمة" aria-controls="mobile-nav-panel" aria-expanded="false">
+          <Menu class="mobile-nav__icon mobile-nav__icon--menu" size={22} stroke-width={1.6} aria-hidden="true" />
+          <X class="mobile-nav__icon mobile-nav__icon--close" size={22} stroke-width={1.6} aria-hidden="true" />
+        </summary>
+
+        <button class="mobile-nav__backdrop" type="button" aria-label="إغلاق القائمة" data-mobile-nav-close></button>
+
+        <div class="mobile-nav__panel" id="mobile-nav-panel">
+          <div class="mobile-nav__meta">
+            <span>MGBC / ADVISORY</span>
+            <span>التنقل</span>
+          </div>
+
+          <nav class="mobile-nav__links" aria-label="التنقل على الهاتف">
+            {navigation.map((item, index) => (
+              <a class="mobile-nav__link" href={item.href} aria-current={isCurrent(item.href) ? 'page' : undefined}>
+                <span class="mobile-nav__index">{String(index + 1).padStart(2, '0')}</span>
+                <span>{item.label}</span>
+                <ArrowUpLeft size={18} stroke-width={1.6} aria-hidden="true" />
+              </a>
+            ))}
+          </nav>
+
+          <div class="mobile-nav__cta">
+            <div>
+              <span class="mobile-nav__cta-label">ابدأ من نقطة واضحة</span>
+              <p>تقييم أولي قصير يساعدنا على فهم نقطة البداية.</p>
+            </div>
+            <a class="button button--primary" href={site.primaryCta.href}>{site.primaryCta.label}</a>
+          </div>
+        </div>
+      </details>
+    </div>
+  </div>
+</header>
+
+<script>
+  document.querySelectorAll('[data-mobile-nav]').forEach((nav) => {
+    if (!(nav instanceof HTMLDetailsElement)) return;
+
+    const summary = nav.querySelector('summary');
+    const panel = nav.querySelector('.mobile-nav__panel');
+    const mobileQuery = window.matchMedia('(max-width: 960px)');
+    const focusableElements = () => panel ? Array.from(panel.querySelectorAll('a[href],button:not([disabled])')).filter((element): element is HTMLElement => element instanceof HTMLElement && !element.hidden) : [];
+    const syncState = () => {
+      const isOpen = nav.open;
+      document.documentElement.classList.toggle('mobile-nav-open', isOpen);
+      summary?.setAttribute('aria-expanded', String(isOpen));
+      summary?.setAttribute('aria-label', isOpen ? 'إغلاق القائمة' : 'فتح القائمة');
+      if (isOpen) requestAnimationFrame(() => focusableElements()[0]?.focus({ preventScroll: true }));
+    };
+    const close = () => {
+      nav.removeAttribute('open');
+      syncState();
+      if (summary instanceof HTMLElement) summary.focus({ preventScroll: true });
+    };
+    nav.addEventListener('toggle', syncState);
+    nav.querySelector('[data-mobile-nav-close]')?.addEventListener('click', close);
+    nav.querySelectorAll('a').forEach((link) => link.addEventListener('click', close));
+
+    document.addEventListener('pointerdown', (event) => {
+      if (nav.open && event.target instanceof Node && !nav.contains(event.target)) close();
+    });
+
+    document.addEventListener('keydown', (event) => {
+      if (event.key === 'Escape' && nav.open) close();
+      if (event.key !== 'Tab' || !nav.open) return;
+      const focusable = focusableElements();
+      const first = focusable[0];
+      const last = focusable[focusable.length - 1];
+      if (!(first instanceof HTMLElement) || !(last instanceof HTMLElement)) return;
+      if (event.shiftKey && document.activeElement === first) {
+        event.preventDefault();
+        last.focus();
+      } else if (!event.shiftKey && document.activeElement === last) {
+        event.preventDefault();
+        first.focus();
+      }
+    });
+
+    mobileQuery.addEventListener('change', () => {
+      if (!mobileQuery.matches && nav.open) close();
+    });
+
+    syncState();
+  });
+</script>
